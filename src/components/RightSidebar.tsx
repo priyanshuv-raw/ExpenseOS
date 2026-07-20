@@ -387,19 +387,19 @@ export function RightSidebar({ isOpen, setIsOpen, selectedDate = new Date() }: R
               {/* Mini visual summary of today's completed habits */}
               <div className="border-t border-neutral-100 dark:border-neutral-900 pt-3">
                 <span className="text-[10px] text-neutral-400 dark:text-neutral-500 uppercase tracking-wider font-bold block mb-2">Logs ({completedTodayCount}/{totalHabitsCount})</span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1">
                   {[...activeHabits].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map(habit => {
                     const completed = todayHabitLogs.some(log => log.habitId === habit.id && log.completed);
                     return (
                       <span 
                         key={habit.id} 
-                        className={`text-[9px] px-2 py-1 rounded-md font-bold select-none flex items-center gap-1 transition-all ${
+                        className={`text-[9px] px-1.5 py-0.5 rounded-md font-semibold select-none inline-flex items-center gap-1 transition-all ${
                           completed 
                             ? 'bg-apple-teal text-white shadow-sm shadow-apple-teal/15 font-bold' 
-                            : 'bg-neutral-100 text-neutral-400 dark:bg-neutral-900 dark:text-neutral-600'
+                            : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400'
                         }`}
                       >
-                        <HabitIconHelper iconName={habit.icon} className="w-3 h-3" />
+                        <HabitIconHelper iconName={habit.icon} className="w-3 h-3 shrink-0" />
                         <span>{habit.name}</span>
                       </span>
                     );
