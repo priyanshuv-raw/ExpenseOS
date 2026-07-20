@@ -27,6 +27,7 @@ import {
 import { initFirebaseSync, onSyncSuccess } from '../db/firebaseSync';
 import { format } from 'date-fns';
 import { DayledgeLogo, DayledgeIcon } from './DayledgeLogo';
+import { ConfirmModal } from './ConfirmModal';
 
 interface SidebarProps {
   activeTab: string;
@@ -62,6 +63,7 @@ export function Sidebar({
 }: SidebarProps) {
   const [user, setUser] = useState<User | null>(auth.currentUser);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState<boolean>(false);
   const [lastSyncTime, setLastSyncTime] = useState<string>('18:02');
 
   useEffect(() => {
@@ -94,10 +96,11 @@ export function Sidebar({
     }
   };
 
-  const handleLogout = async () => {
-    if (!window.confirm('Are you sure you want to sign out of your Dayledge account?')) {
-      return;
-    }
+  const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = async () => {
     try {
       setLoading(true);
       await logoutUser();
@@ -417,6 +420,19 @@ export function Sidebar({
           </div>
         </div>
       </aside>
+
+      {/* Aesthetic Sign-Out Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleConfirmLogout}
+        title="Sign Out of Dayledge?"
+        description="Are you sure you want to sign out? Your offline habits and financial tracking data remain safe on this device."
+        confirmText="Sign Out"
+        cancelText="Cancel"
+        variant="danger"
+        loading={loading}
+      />
     </>
   );
 }
