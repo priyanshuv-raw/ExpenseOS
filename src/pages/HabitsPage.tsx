@@ -380,56 +380,63 @@ export function HabitsPage() {
       </div>
 
       {/* Habit Streak Cards & Heatmaps */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {activeHabitsList.map(habit => {
           const streak = calculateStreaks(habit.id);
+          const monthStr = format(today, 'yyyy-MM');
           const habitLogsMap = new Set(
             logs.filter(l => l.habitId === habit.id && l.completed).map(l => l.date)
           );
+          const monthCompletedCount = logs.filter(l => l.habitId === habit.id && l.completed && l.date.startsWith(monthStr)).length;
 
           return (
-            <Card key={habit.id} className="flex flex-col justify-between p-5 min-h-[175px]">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-apple-teal/10 text-apple-teal">
-                      <HabitIconHelper iconName={habit.icon} className="w-5 h-5" />
-                    </div>
-                    <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white">{habit.name}</h3>
+            <Card key={habit.id} className="p-4.5 rounded-2xl flex flex-col gap-3">
+              {/* Header & Streaks */}
+              <div className="flex justify-between items-center gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-apple-teal/10 text-apple-teal shrink-0">
+                    <HabitIconHelper iconName={habit.icon} className="w-5 h-5 text-apple-teal" />
                   </div>
-                  
-                  <div className="flex gap-4 mt-3 ml-1.5">
-                    <div className="flex items-center gap-1.5 text-xs text-neutral-550">
-                      <Zap className="w-3.5 h-3.5 text-apple-orange fill-apple-orange/20" />
-                      <span>Streak: <strong>{streak.current}d</strong></span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs text-neutral-550">
-                      <Award className="w-3.5 h-3.5 text-apple-blue" />
-                      <span>Longest: <strong>{streak.longest}d</strong></span>
-                    </div>
+                  <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white truncate">{habit.name}</h3>
+                </div>
+                
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1 text-xs text-neutral-700 dark:text-neutral-200 font-semibold bg-neutral-100 dark:bg-neutral-800/80 px-2.5 py-1 rounded-xl border border-neutral-200/50 dark:border-neutral-700/60">
+                    <Zap className="w-3.5 h-3.5 text-apple-orange fill-apple-orange/20" />
+                    <span><strong>{streak.current}d</strong> streak</span>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-1 text-xs text-neutral-700 dark:text-neutral-200 font-semibold bg-neutral-100 dark:bg-neutral-800/80 px-2.5 py-1 rounded-xl border border-neutral-200/50 dark:border-neutral-700/60">
+                    <Award className="w-3.5 h-3.5 text-apple-blue" />
+                    <span><strong>{streak.longest}d</strong> max</span>
                   </div>
                 </div>
               </div>
 
-              {/* Monthly Heatmap Calendar */}
-              <div className="mt-5 border-t border-neutral-200 dark:border-neutral-800 pt-3">
-                <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest block mb-2">
-                  Monthly Heatmap
-                </span>
-                
-                <div className="grid grid-cols-7 gap-1 w-max">
+              {/* Monthly Full-Width Heatmap Strip */}
+              <div className="pt-1 border-t border-neutral-100 dark:border-neutral-800/80">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+                    {format(today, 'MMMM')} Heatmap ({currentMonthDays.length} Days)
+                  </span>
+                  <span className="text-[10px] font-bold text-apple-teal bg-apple-teal/10 dark:bg-apple-teal/20 px-2 py-0.5 rounded-full border border-apple-teal/20">
+                    {monthCompletedCount}/{currentMonthDays.length} Completed
+                  </span>
+                </div>
+
+                <div className="grid grid-flow-col auto-cols-fr gap-1 w-full">
                   {currentMonthDays.map(date => {
                     const dStr = format(date, 'yyyy-MM-dd');
                     const done = habitLogsMap.has(dStr);
+                    const isTodayDate = dStr === todayStr;
                     return (
                       <div
                         key={dStr}
-                        title={`${format(date, 'MMM dd')}: ${done ? 'Completed' : 'Incomplete'}`}
-                        className={`w-3.5 h-3.5 rounded-sm border ${
+                        title={`${format(date, 'EEE, MMM dd')}: ${done ? 'Completed ✓' : 'Incomplete'}`}
+                        className={`h-5 sm:h-6 rounded-md transition-all cursor-pointer ${
                           done 
-                            ? 'bg-apple-teal border-apple-teal shadow-xs' 
-                            : 'bg-neutral-100 border-neutral-300/30 dark:bg-neutral-950 dark:border-neutral-800'
-                        }`}
+                            ? 'bg-apple-teal shadow-xs scale-105' 
+                            : 'bg-neutral-100 dark:bg-neutral-800/80 border border-neutral-200/50 dark:border-neutral-700/60 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                        } ${isTodayDate ? 'ring-1 ring-apple-blue ring-offset-1 dark:ring-offset-neutral-900' : ''}`}
                       />
                     );
                   })}
