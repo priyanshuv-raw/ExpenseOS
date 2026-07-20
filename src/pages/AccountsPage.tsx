@@ -289,10 +289,10 @@ export function AccountsPage() {
                       key={iconName}
                       type="button"
                       onClick={() => setAccIcon(iconName)}
-                      className={`p-2.5 rounded-lg border transition-all ${
+                      className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
                         isSelected 
                           ? 'bg-apple-blue border-apple-blue text-white shadow-sm scale-105' 
-                          : 'bg-white border-neutral-200 hover:bg-neutral-100 text-neutral-600 dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-400'
+                          : 'bg-white border-neutral-200 hover:bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white'
                       }`}
                       title={iconName}
                     >
@@ -306,7 +306,7 @@ export function AccountsPage() {
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="bg-apple-blue text-white hover:scale-[1.01] active:scale-[0.99] px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-apple-blue/15"
+                className="bg-apple-blue text-white hover:scale-[1.01] active:scale-[0.99] px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-apple-blue/15 cursor-pointer"
               >
                 {isEditing ? 'Save Changes' : 'Create Account'}
               </button>
@@ -319,7 +319,7 @@ export function AccountsPage() {
                     setAccBalance('');
                     setAccIcon('bank');
                   }}
-                  className="bg-neutral-250 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-750 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors"
+                  className="bg-neutral-250 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-750 px-4 py-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -332,18 +332,18 @@ export function AccountsPage() {
             {accounts.map(acc => (
               <div key={acc.id} className="flex justify-between items-center bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-4 py-3 rounded-xl text-xs">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950 text-neutral-600 dark:text-neutral-300">
+                  <div className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-700/60 text-neutral-800 dark:text-white">
                     <AccountIconHelper iconName={acc.icon} className="w-4 h-4" />
                   </div>
                   <div>
                     <span className="font-bold text-neutral-850 dark:text-neutral-200 block">{acc.name}</span>
-                    <span className="text-[10px] text-neutral-450">Current Balance: ₹{acc.balance.toLocaleString()}</span>
+                    <span className="text-[10px] text-neutral-450 dark:text-neutral-400">Current Balance: ₹{acc.balance.toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleStartEdit(acc)}
-                    className="p-1.5 text-neutral-450 hover:text-apple-blue transition-colors"
+                    className="p-1.5 text-neutral-450 hover:text-apple-blue transition-colors cursor-pointer"
                     title="Edit Account"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -351,14 +351,14 @@ export function AccountsPage() {
                   {deleteConfirmId === acc.id ? (
                     <button
                       onClick={() => handleDeleteAccount(acc.id)}
-                      className="bg-apple-red text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-sm shadow-apple-red/15 hover:bg-red-650 transition-all animate-pulse-slow"
+                      className="bg-apple-red text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold shadow-sm shadow-apple-red/15 hover:bg-red-650 transition-all animate-pulse-slow cursor-pointer"
                     >
                       Delete?
                     </button>
                   ) : (
                     <button 
                       onClick={() => handleDeleteAccount(acc.id)}
-                      className="p-1.5 text-neutral-455 hover:text-apple-red transition-colors animate-fade-in"
+                      className="p-1.5 text-neutral-455 hover:text-apple-red transition-colors animate-fade-in cursor-pointer"
                       title="Delete Account"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -386,7 +386,7 @@ export function AccountsPage() {
               }`}
             >
               <div className="flex justify-between items-start">
-                <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-850 text-neutral-750 dark:text-neutral-200">
+                <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-700/60 text-neutral-800 dark:text-white">
                   <AccountIconHelper iconName={acc.icon} className="w-5 h-5" />
                 </div>
                 <div className="text-right">
