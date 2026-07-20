@@ -316,18 +316,20 @@ export function DailyPage({ dateStr, onClose }: DailyPageProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 dark:bg-black/60 backdrop-blur-xs z-35 flex justify-end">
+    <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-stretch justify-end">
       {/* Tap off target */}
-      <div className="flex-1" onClick={onClose} />
+      <div className="hidden sm:block flex-1" onClick={onClose} />
 
       <motion.div 
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-        className="w-full max-w-xl h-screen bg-white dark:bg-neutral-950 border-l border-neutral-100 dark:border-neutral-900 shadow-2xl p-6 overflow-y-auto z-40 flex flex-col justify-between"
+        initial={{ y: '100%', opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: '100%', opacity: 0 }}
+        transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+        className="w-full max-w-2xl h-[90vh] sm:h-screen bg-white dark:bg-neutral-950 border-t sm:border-t-0 sm:border-l border-neutral-200/60 dark:border-neutral-800/60 rounded-t-3xl sm:rounded-none shadow-2xl p-4 sm:p-6 overflow-y-auto z-50 flex flex-col justify-between"
       >
         <div>
+          {/* iOS Grab Bar */}
+          <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-3 sm:hidden" />
           {/* Header */}
           <div className="flex justify-between items-start border-b border-neutral-100 dark:border-neutral-900 pb-4 mb-5">
             <div>

@@ -256,8 +256,10 @@ export function FloatingAddButton() {
 
       {/* 1. Add Expense Modal */}
       {activeModal === 'expense' && (
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-6 w-full max-w-md shadow-2xl relative">
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto animate-slide-up sm:animate-none">
+            {/* iOS Grab Bar */}
+            <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-4 sm:hidden" />
             <button 
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white"
@@ -398,8 +400,10 @@ export function FloatingAddButton() {
 
       {/* 2. Write Journal Modal */}
       {activeModal === 'journal' && (
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-6 w-full max-w-xl shadow-2xl relative h-[90vh] overflow-y-auto no-scrollbar">
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 w-full max-w-xl shadow-2xl relative h-[88vh] sm:h-[90vh] overflow-y-auto no-scrollbar animate-slide-up sm:animate-none">
+            {/* iOS Grab Bar */}
+            <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-4 sm:hidden" />
             <button 
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white"
@@ -596,8 +600,10 @@ export function FloatingAddButton() {
 
       {/* 3. Toggle Habits Modal */}
       {activeModal === 'habits' && (
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl relative">
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 w-full max-w-sm shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto animate-slide-up sm:animate-none">
+            {/* iOS Grab Bar */}
+            <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-4 sm:hidden" />
             <button 
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-neutral-400 hover:text-neutral-700 dark:hover:text-white"

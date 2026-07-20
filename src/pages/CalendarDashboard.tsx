@@ -495,87 +495,112 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
 
               {/* Day Metrics Node Indicators */}
               <div className="flex flex-col gap-1.5 mt-3">
-                {/* 1. Spent + Sleep + Cigs — single line */}
-                <div className="flex items-center gap-1 flex-wrap">
+                {/* Mobile Visual Dot Indicators */}
+                <div className="flex md:hidden items-center justify-center gap-1 mt-auto pt-1">
                   {metrics.totalSpent > 0 && (
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded tracking-tight ${
-                      metrics.totalSpent <= 450
-                        ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10'
-                        : 'text-apple-red dark:text-apple-red bg-apple-red/8'
-                    }`}>
-                      ₹{metrics.totalSpent.toLocaleString()}
-                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-apple-red" />
                   )}
-                  {metrics.journalWritten && metrics.sleepHours > 0 && (
-                    <span className="text-[8px] font-bold text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1 py-0.5 rounded leading-none">
-                      💤{metrics.sleepHours}h
-                    </span>
+                  {metrics.dueFixedExpenses.length > 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   )}
-                  {metrics.journalWritten && metrics.cigarettes > 0 && (
-                    <span className="text-[8px] font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-1 py-0.5 rounded leading-none">
-                      🚬{metrics.cigarettes}
-                    </span>
+                  {metrics.dueDebts.length > 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-apple-blue" />
+                  )}
+                  {metrics.habitPercent > 0 && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-apple-teal" />
                   )}
                 </div>
 
-                {/* 2. Debt / Receivable due pills */}
-                {metrics.dueDebts.length > 0 && (
-                  <div className="flex flex-col gap-0.5">
-                    {metrics.dueDebts.map(debt => (
-                      <div
-                        key={debt.id}
-                        className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate ${
-                          debt.direction === 'lent'
-                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
-                            : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'
-                        }`}
-                        title={`${debt.direction === 'lent' ? '↗ Receivable' : '↙ Pay'}: ${debt.name} — ₹${debt.outstandingAmount.toLocaleString()}`}
-                      >
-                        <span>{debt.direction === 'lent' ? '↗' : '↙'}</span>
-                        <span className="truncate">{debt.name.length > 8 ? debt.name.slice(0, 8) + '…' : debt.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {/* Desktop Detailed Chips */}
+                <div className="hidden md:flex flex-col gap-1 w-full">
+                  {metrics.mood && (
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span>{metrics.mood}</span>
+                      <span className="text-[9px] text-neutral-400 font-semibold">{dateStr.slice(8)}</span>
+                    </div>
+                  )}
 
-                {/* 3. Fixed recurring due pills */}
-                {metrics.dueFixedExpenses.length > 0 && (
-                  <div className="flex flex-col gap-0.5">
-                    {metrics.dueFixedExpenses.map(fe => {
-                      const isIncome = fe.category === 'Income';
-                      return (
+                  {/* 1. Spent + Sleep + Cigs — single line */}
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {metrics.totalSpent > 0 && (
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded tracking-tight ${
+                        metrics.totalSpent <= 450
+                          ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10'
+                          : 'text-apple-red dark:text-apple-red bg-apple-red/8'
+                      }`}>
+                        ₹{metrics.totalSpent.toLocaleString()}
+                      </span>
+                    )}
+                    {metrics.journalWritten && metrics.sleepHours > 0 && (
+                      <span className="text-[8px] font-bold text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1 py-0.5 rounded leading-none">
+                        💤{metrics.sleepHours}h
+                      </span>
+                    )}
+                    {metrics.journalWritten && metrics.cigarettes > 0 && (
+                      <span className="text-[8px] font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-1 py-0.5 rounded leading-none">
+                        🚬{metrics.cigarettes}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 2. Debt / Receivable due pills */}
+                  {metrics.dueDebts.length > 0 && (
+                    <div className="flex flex-col gap-0.5">
+                      {metrics.dueDebts.map(debt => (
                         <div
-                          key={fe.id}
+                          key={debt.id}
                           className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate ${
-                            isIncome
+                            debt.direction === 'lent'
                               ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
                               : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'
                           }`}
-                          title={`${isIncome ? '↑ Income' : '↓ Expense'}: ${fe.name} — ₹${fe.amount.toLocaleString()} (${fe.repeat})`}
+                          title={`${debt.direction === 'lent' ? '↗ Receivable' : '↙ Pay'}: ${debt.name} — ₹${debt.outstandingAmount.toLocaleString()}`}
                         >
-                          <span>{isIncome ? '↑' : '↓'}</span>
-                          <span className="truncate">{fe.name.length > 8 ? fe.name.slice(0, 8) + '…' : fe.name}</span>
+                          <span>{debt.direction === 'lent' ? '↗' : '↙'}</span>
+                          <span className="truncate">{debt.name.length > 8 ? debt.name.slice(0, 8) + '…' : debt.name}</span>
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* 3. Habit bar */}
-                {metrics.habitPercent > 0 && (
-                  <div className="flex items-center gap-1.5 mt-auto pt-1">
-                    <div className="flex-1 h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-apple-teal rounded-full transition-all duration-350"
-                        style={{ width: `${metrics.habitPercent}%` }}
-                      />
+                      ))}
                     </div>
-                    <span className="text-[8px] font-bold text-apple-teal leading-none">
-                      {metrics.habitPercent}%
-                    </span>
-                  </div>
-                )}
+                  )}
 
+                  {/* 3. Fixed recurring due pills */}
+                  {metrics.dueFixedExpenses.length > 0 && (
+                    <div className="flex flex-col gap-0.5">
+                      {metrics.dueFixedExpenses.map(fe => {
+                        const isIncome = fe.category === 'Income';
+                        return (
+                          <div
+                            key={fe.id}
+                            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate ${
+                              isIncome
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
+                                : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'
+                            }`}
+                            title={`${isIncome ? '↑ Income' : '↓ Expense'}: ${fe.name} — ₹${fe.amount.toLocaleString()} (${fe.repeat})`}
+                          >
+                            <span>{isIncome ? '↑' : '↓'}</span>
+                            <span className="truncate">{fe.name.length > 8 ? fe.name.slice(0, 8) + '…' : fe.name}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* 3. Habit bar */}
+                  {metrics.habitPercent > 0 && (
+                    <div className="flex items-center gap-1.5 mt-auto pt-1">
+                      <div className="flex-1 h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-apple-teal rounded-full transition-all duration-350"
+                          style={{ width: `${metrics.habitPercent}%` }}
+                        />
+                      </div>
+                      <span className="text-[8px] font-bold text-apple-teal leading-none">
+                        {metrics.habitPercent}%
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </Card>
           );
