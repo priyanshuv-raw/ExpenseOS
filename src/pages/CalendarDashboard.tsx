@@ -32,7 +32,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
   const currentDate = propCurrentDate || internalDate;
   const setCurrentDate = propSetCurrentDate || setInternalDate;
 
-  const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
+  const [viewMode, setViewMode] = useState<'month' | 'week' | 'agenda'>('month');
   const [selectedDayStr, setSelectedDayStr] = useState<string | null>(null);
 
   const [showHealthModal, setShowHealthModal] = useState(false);
@@ -144,7 +144,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
 
   // Generate calendar days
   const getDays = () => {
-    if (viewMode === 'month') {
+    if (viewMode === 'month' || viewMode === 'agenda') {
       const monthStart = startOfMonth(currentDate);
       const monthEnd = endOfMonth(monthStart);
       const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
@@ -392,7 +392,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Month / Week toggle */}
+          {/* Month / Week / Agenda toggle */}
           <div className="flex bg-neutral-100 dark:bg-neutral-900 p-0.75 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs">
             <button
               onClick={() => setViewMode('month')}
@@ -402,7 +402,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                   : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800'
               }`}
             >
-              Month View
+              Month
             </button>
             <button
               onClick={() => setViewMode('week')}
@@ -412,7 +412,17 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                   : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800'
               }`}
             >
-              Week View
+              Week
+            </button>
+            <button
+              onClick={() => setViewMode('agenda')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                viewMode === 'agenda' 
+                  ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-sm' 
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800'
+              }`}
+            >
+              Agenda
             </button>
           </div>
 
@@ -420,20 +430,20 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
           <div className="flex items-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 rounded-xl overflow-hidden shadow-sm">
             <button
               onClick={handlePrev}
-              className="p-2 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-850 dark:text-neutral-400 transition-colors border-r border-neutral-200 dark:border-neutral-800"
+              className="p-2 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-850 dark:text-neutral-400 transition-colors border-r border-neutral-200 dark:border-neutral-800 cursor-pointer"
               aria-label="Previous"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleToday}
-              className="px-3.5 py-2 text-xs font-bold text-neutral-700 dark:text-neutral-350 hover:bg-neutral-50 dark:hover:bg-neutral-850 transition-colors border-r border-neutral-200 dark:border-neutral-800"
+              className="px-3.5 py-2 text-xs font-bold text-neutral-700 dark:text-neutral-350 hover:bg-neutral-50 dark:hover:bg-neutral-850 transition-colors border-r border-neutral-200 dark:border-neutral-800 cursor-pointer"
             >
               Today
             </button>
             <button
               onClick={handleNext}
-              className="p-2 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-850 dark:text-neutral-400 transition-colors"
+              className="p-2 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-850 dark:text-neutral-400 transition-colors cursor-pointer"
               aria-label="Next"
             >
               <ChevronRight className="w-4 h-4" />
@@ -442,51 +452,119 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
         </div>
       </div>
 
-      {/* Apple Calendar Week Day Labels */}
-      <div className="grid grid-cols-7 gap-3 text-center border-b border-neutral-100 dark:border-neutral-800/80 pb-2">
-        {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d) => (
-          <span key={d} className="text-[11px] font-extrabold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
-            {d}
-          </span>
-        ))}
-      </div>
+      {/* AGENDA FEED VIEW */}
+      {viewMode === 'agenda' ? (
+        <div className="flex flex-col gap-2.5">
+          {days.filter(d => isSameMonth(d, currentDate)).map((date) => {
+            const dateStr = format(date, 'yyyy-MM-dd');
+            const isSelToday = isToday(date);
+            const metrics = getDayMetrics(date);
+            const hasData = metrics.totalSpent > 0 || metrics.journalWritten || metrics.dueDebts.length > 0 || metrics.dueFixedExpenses.length > 0;
 
-      {/* Apple Calendar Grid */}
-      <div className="grid grid-cols-7 gap-3">
-        {days.map((date, idx) => {
-          const isCurrentMonth = isSameMonth(date, currentDate);
-          const dateStr = format(date, 'yyyy-MM-dd');
-          const isSelToday = isToday(date);
-          const metrics = getDayMetrics(date);
+            return (
+              <Card
+                key={dateStr}
+                onClick={() => setSelectedDayStr(dateStr)}
+                className={`p-3.5 rounded-2xl cursor-pointer transition-all flex items-center justify-between gap-4 border ${
+                  isSelToday
+                    ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-md'
+                    : 'bg-white/80 dark:bg-[#0d1b2a]/60 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40'
+                }`}
+              >
+                <div className="flex items-center gap-3.5 min-w-[140px]">
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${
+                    isSelToday ? 'bg-apple-blue text-white shadow-md' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200'
+                  }`}>
+                    {format(date, 'd')}
+                  </span>
+                  <div>
+                    <span className="text-xs font-bold text-neutral-900 dark:text-white block">{format(date, 'EEEE')}</span>
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-semibold">{format(date, 'MMM d, yyyy')}</span>
+                  </div>
+                </div>
 
-          return (
-            <Card
-              key={idx}
-              hoverEffect={isCurrentMonth}
-              onClick={() => setSelectedDayStr(dateStr)}
-              className={`min-h-[115px] flex flex-col justify-between cursor-pointer text-left select-none relative transition-all duration-200 rounded-2xl p-3 ${
-                !isCurrentMonth 
-                  ? 'opacity-20 pointer-events-none' 
-                  : 'bg-white/70 dark:bg-[#0d1b2a]/50 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40 hover:shadow-md'
-              } ${
-                isSelToday 
-                  ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-lg shadow-apple-blue/10' 
-                  : ''
-              }`}
-            >
-              <div className="flex items-center justify-between w-full">
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all ${
-                  isSelToday 
-                    ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/30 scale-105' 
-                    : 'text-neutral-700 dark:text-neutral-200'
-                }`}>
-                  {format(date, 'd')}
-                </span>
-                {/* Mood on top right */}
-                {metrics.mood && (
-                  <span className="text-sm select-none leading-none drop-shadow-xs">{metrics.mood}</span>
-                )}
-              </div>
+                <div className="flex items-center gap-2.5 flex-wrap justify-end">
+                  {metrics.mood && <span className="text-base select-none">{metrics.mood}</span>}
+
+                  {metrics.totalSpent > 0 && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      ₹{metrics.totalSpent.toLocaleString()}
+                    </span>
+                  )}
+
+                  {metrics.journalWritten && metrics.sleepHours > 0 && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20">
+                      💤 {metrics.sleepHours}h
+                    </span>
+                  )}
+
+                  {metrics.dueDebts.length > 0 && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                      {metrics.dueDebts.length} Debt Due
+                    </span>
+                  )}
+
+                  {metrics.dueFixedExpenses.length > 0 && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                      {metrics.dueFixedExpenses.length} Bill Due
+                    </span>
+                  )}
+
+                  {!hasData && (
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-600 italic">No logs</span>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <>
+          {/* Apple Calendar Week Day Labels */}
+          <div className="grid grid-cols-7 gap-1.5 md:gap-3 text-center border-b border-neutral-100 dark:border-neutral-800/80 pb-2">
+            {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d) => (
+              <span key={d} className="text-[10px] md:text-[11px] font-extrabold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+                {d}
+              </span>
+            ))}
+          </div>
+
+          {/* Apple Calendar Grid */}
+          <div className="grid grid-cols-7 gap-1.5 md:gap-3">
+            {days.map((date, idx) => {
+              const isCurrentMonth = isSameMonth(date, currentDate);
+              const dateStr = format(date, 'yyyy-MM-dd');
+              const isSelToday = isToday(date);
+              const metrics = getDayMetrics(date);
+
+              return (
+                <Card
+                  key={idx}
+                  hoverEffect={isCurrentMonth}
+                  onClick={() => setSelectedDayStr(dateStr)}
+                  className={`min-h-[70px] md:min-h-[105px] flex flex-col justify-between cursor-pointer text-left select-none relative transition-all duration-200 rounded-xl md:rounded-2xl p-1.5 md:p-3 ${
+                    !isCurrentMonth 
+                      ? 'opacity-20 pointer-events-none' 
+                      : 'bg-white/80 dark:bg-[#0d1b2a]/60 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40 hover:shadow-md'
+                  } ${
+                    isSelToday 
+                      ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-lg shadow-apple-blue/10' 
+                      : ''
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className={`w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-[11px] md:text-xs font-black transition-all ${
+                      isSelToday 
+                        ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/30 scale-105' 
+                        : 'text-neutral-700 dark:text-neutral-200'
+                    }`}>
+                      {format(date, 'd')}
+                    </span>
+                    {/* Mood on top right */}
+                    {metrics.mood && (
+                      <span className="text-xs md:text-sm select-none leading-none drop-shadow-xs">{metrics.mood}</span>
+                    )}
+                  </div>
 
               {/* Day Metrics Node Indicators */}
               <div className="flex flex-col gap-1.5 mt-3">
@@ -591,6 +669,8 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
           );
         })}
       </div>
+    </>
+  )}
 
       {/* Sliding daily drawer page */}
       {selectedDayStr && (
