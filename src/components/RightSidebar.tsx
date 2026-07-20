@@ -396,10 +396,10 @@ export function RightSidebar({ isOpen, setIsOpen, selectedDate = new Date() }: R
                         className={`text-[9px] px-1.5 py-0.5 rounded-md font-semibold select-none inline-flex items-center gap-1 transition-all ${
                           completed 
                             ? 'bg-apple-teal text-white shadow-sm shadow-apple-teal/15 font-bold' 
-                            : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400'
+                            : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800/90 dark:text-neutral-200 border border-neutral-200/50 dark:border-neutral-700/60'
                         }`}
                       >
-                        <HabitIconHelper iconName={habit.icon} className="w-3 h-3 shrink-0" />
+                        <HabitIconHelper iconName={habit.icon} className={`w-3 h-3 shrink-0 ${completed ? 'text-white' : 'text-neutral-500 dark:text-neutral-300'}`} />
                         <span>{habit.name}</span>
                       </span>
                     );

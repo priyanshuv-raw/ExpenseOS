@@ -513,19 +513,19 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                     {metrics.totalSpent > 0 && (
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded tracking-tight ${
                         metrics.totalSpent <= 450
-                          ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10'
-                          : 'text-apple-red dark:text-apple-red bg-apple-red/8'
+                          ? 'text-emerald-600 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-950/60 border border-emerald-500/20'
+                          : 'text-apple-red dark:text-red-400 bg-apple-red/10 dark:bg-red-950/60 border border-red-500/20'
                       }`}>
                         ₹{metrics.totalSpent.toLocaleString()}
                       </span>
                     )}
                     {metrics.journalWritten && metrics.sleepHours > 0 && (
-                      <span className="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded tracking-tight">
+                      <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/60 border border-indigo-500/20 px-1.5 py-0.5 rounded tracking-tight">
                         💤{metrics.sleepHours}h
                       </span>
                     )}
                     {metrics.journalWritten && metrics.cigarettes > 0 && (
-                      <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-1.5 py-0.5 rounded tracking-tight">
+                      <span className="text-[10px] font-bold text-orange-600 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/60 border border-orange-500/20 px-1.5 py-0.5 rounded tracking-tight">
                         🚬{metrics.cigarettes}
                       </span>
                     )}
@@ -537,10 +537,10 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                       {metrics.dueDebts.map(debt => (
                         <div
                           key={debt.id}
-                          className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate ${
+                          className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate border ${
                             debt.direction === 'lent'
-                              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
-                              : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'
+                              ? 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
+                              : 'bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 border-red-500/20'
                           }`}
                           title={`${debt.direction === 'lent' ? '↗ Receivable' : '↙ Pay'}: ${debt.name} — ₹${debt.outstandingAmount.toLocaleString()}`}
                         >
@@ -559,10 +559,10 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                         return (
                           <div
                             key={fe.id}
-                            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate ${
+                            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate border ${
                               isIncome
-                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
-                                : 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400'
+                                ? 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
+                                : 'bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 border-red-500/20'
                             }`}
                             title={`${isIncome ? '↑ Income' : '↓ Expense'}: ${fe.name} — ₹${fe.amount.toLocaleString()} (${fe.repeat})`}
                           >
