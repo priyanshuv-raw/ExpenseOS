@@ -77,6 +77,8 @@ export const signInWithGoogle = async () => {
 
 export const logoutUser = async () => {
   try {
+    const { clearLocalDatabase } = await import('../db/firebaseSync');
+    await clearLocalDatabase();
     await signOut(auth);
   } catch (error) {
     console.error("Logout Error:", error);
