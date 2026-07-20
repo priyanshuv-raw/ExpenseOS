@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type OutstandingDebt } from '../db/db';
+import { pushLocalToFirebase } from '../db/firebaseSync';
 import { Card } from '../components/Card';
 import { Plus, X, Landmark, AlertTriangle, CheckCircle, HandMetal, CreditCard, ChevronRight, Edit2, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -61,6 +62,7 @@ export function OutstandingPage() {
     };
 
     await db.outstanding.add(newDebt);
+    pushLocalToFirebase();
 
     // Reset Form
     setName('');
@@ -106,6 +108,7 @@ export function OutstandingPage() {
     };
 
     await db.outstanding.put(updated);
+    pushLocalToFirebase();
     
     // Reset Form
     setEditingDebtId(null);
@@ -130,6 +133,7 @@ export function OutstandingPage() {
 
     try {
       await db.outstanding.delete(id);
+      pushLocalToFirebase();
       setDeleteConfirmId(null);
     } catch (err) {
       console.error("Failed to delete liability:", err);
@@ -200,6 +204,8 @@ export function OutstandingPage() {
       date: todayStr,
       time: format(new Date(), 'HH:mm')
     });
+
+    pushLocalToFirebase();
 
     // Reset Form
     setPayAmount('');

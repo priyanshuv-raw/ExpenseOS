@@ -12,8 +12,9 @@ let unsubscribeSnapshot: (() => void) | null = null;
 /**
  * Pushes local Dexie database to Firebase Firestore under user's document
  */
-export async function pushLocalToFirebase(userId: string) {
-  if (isSyncingFromCloud || !dbFirestore) return;
+export async function pushLocalToFirebase(userId?: string) {
+  const targetUid = userId || currentUser?.uid || auth?.currentUser?.uid;
+  if (isSyncingFromCloud || !dbFirestore || !targetUid) return;
 
   clearTimeout(pushTimeout);
   pushTimeout = setTimeout(async () => {
@@ -31,12 +32,16 @@ export async function pushLocalToFirebase(userId: string) {
         updatedAt: new Date().toISOString()
       };
 
-      const userDocRef = doc(dbFirestore, 'users', userId);
+      const userDocRef = doc(dbFirestore, 'users', targetUid);
       await setDoc(userDocRef, data, { merge: true });
-    } catch (err) {
+      console.log('☁️ Successfully synced all data (including Outstanding) to Firestore Cloud!');
+    } catch (err: any) {
       console.error('Firebase Cloud Push Error:', err);
+      if (err?.code === 'permission-denied') {
+        console.warn('⚠️ Firestore Rules locked! Go to Firebase Console -> Firestore Database -> Rules tab, set: "allow read, write: if true;" or "if request.auth != null;"');
+      }
     }
-  }, 500);
+  }, 300);
 }
 
 /**
@@ -136,12 +141,12 @@ export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
   db.scheduledTransactions
 ].forEach(table => {
   table.hook('creating', () => {
-    if (currentUser) pushLocalToFirebase(currentUser.uid);
+    pushLocalToFirebase();
   });
   table.hook('updating', () => {
-    if (currentUser) pushLocalToFirebase(currentUser.uid);
+    pushLocalToFirebase();
   });
   table.hook('deleting', () => {
-    if (currentUser) pushLocalToFirebase(currentUser.uid);
+    pushLocalToFirebase();
   });
 });
