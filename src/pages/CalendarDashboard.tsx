@@ -513,13 +513,6 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
 
                 {/* Desktop Detailed Chips */}
                 <div className="hidden md:flex flex-col gap-1 w-full">
-                  {metrics.mood && (
-                    <div className="flex justify-between items-center text-[10px]">
-                      <span>{metrics.mood}</span>
-                      <span className="text-[9px] text-neutral-400 font-semibold">{dateStr.slice(8)}</span>
-                    </div>
-                  )}
-
                   {/* 1. Spent + Sleep + Cigs — single line */}
                   <div className="flex items-center gap-1 flex-wrap">
                     {metrics.totalSpent > 0 && (
