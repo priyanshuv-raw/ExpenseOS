@@ -18,17 +18,29 @@ export async function pushLocalToFirebase(userId?: string) {
 
   clearTimeout(pushTimeout);
   pushTimeout = setTimeout(async () => {
+    if (isSyncingFromCloud) return;
     try {
+      // Serialize arrays cleanly to prevent Firestore class/prototype rejection
+      const journal = JSON.parse(JSON.stringify(await db.journal.toArray()));
+      const expenses = JSON.parse(JSON.stringify(await db.expenses.toArray()));
+      const fixedExpenses = JSON.parse(JSON.stringify(await db.fixedExpenses.toArray()));
+      const accounts = JSON.parse(JSON.stringify(await db.accounts.toArray()));
+      const outstanding = JSON.parse(JSON.stringify(await db.outstanding.toArray()));
+      const habits = JSON.parse(JSON.stringify(await db.habits.toArray()));
+      const habitLogs = JSON.parse(JSON.stringify(await db.habitLogs.toArray()));
+      const settings = JSON.parse(JSON.stringify(await db.settings.toArray()));
+      const scheduledTransactions = JSON.parse(JSON.stringify(await db.scheduledTransactions.toArray()));
+
       const data = {
-        journal: await db.journal.toArray(),
-        expenses: await db.expenses.toArray(),
-        fixedExpenses: await db.fixedExpenses.toArray(),
-        accounts: await db.accounts.toArray(),
-        outstanding: await db.outstanding.toArray(),
-        habits: await db.habits.toArray(),
-        habitLogs: await db.habitLogs.toArray(),
-        settings: await db.settings.toArray(),
-        scheduledTransactions: await db.scheduledTransactions.toArray(),
+        journal,
+        expenses,
+        fixedExpenses,
+        accounts,
+        outstanding,
+        habits,
+        habitLogs,
+        settings,
+        scheduledTransactions,
         updatedAt: new Date().toISOString()
       };
 
@@ -64,7 +76,9 @@ export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
       // Listen for real-time cloud changes from other devices
       const userDocRef = doc(dbFirestore, 'users', user.uid);
       unsubscribeSnapshot = onSnapshot(userDocRef, async (snapshot) => {
-        if (!snapshot.exists()) return;
+        // Skip local pending write snapshots to prevent self-clearing loops
+        if (!snapshot.exists() || snapshot.metadata.hasPendingWrites) return;
+
         const cloudData = snapshot.data();
         if (!cloudData) return;
 
@@ -141,12 +155,12 @@ export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
   db.scheduledTransactions
 ].forEach(table => {
   table.hook('creating', () => {
-    pushLocalToFirebase();
+    if (!isSyncingFromCloud) pushLocalToFirebase();
   });
   table.hook('updating', () => {
-    pushLocalToFirebase();
+    if (!isSyncingFromCloud) pushLocalToFirebase();
   });
   table.hook('deleting', () => {
-    pushLocalToFirebase();
+    if (!isSyncingFromCloud) pushLocalToFirebase();
   });
 });
