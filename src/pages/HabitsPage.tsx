@@ -340,12 +340,12 @@ export function HabitsPage() {
           <tbody>
             {activeHabitsList.map(habit => (
               <tr key={habit.id} className="border-b border-neutral-100 dark:border-neutral-900/40 hover:bg-neutral-50/30 dark:hover:bg-neutral-900/20">
-                <td className="text-xs font-bold text-neutral-800 dark:text-neutral-250 py-3.5 pr-4">
+                <td className="text-xs font-bold text-neutral-900 dark:text-white py-3.5 pr-4">
                   <div className="flex items-center gap-2">
                     <div className="text-apple-teal">
-                      <HabitIconHelper iconName={habit.icon} className="w-4 h-4" />
+                      <HabitIconHelper iconName={habit.icon} className="w-4 h-4 text-apple-teal" />
                     </div>
-                    <span>{habit.name}</span>
+                    <span className="text-neutral-900 dark:text-white font-bold">{habit.name}</span>
                   </div>
                 </td>
                 {last7Days.map(date => {

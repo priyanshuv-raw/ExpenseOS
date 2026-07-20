@@ -171,22 +171,22 @@ export function AnalyticsPage() {
         </Card>
 
         <Card className="flex items-center gap-4">
-          <div className="p-3 bg-neutral-100 dark:bg-neutral-850 rounded-xl text-neutral-900 dark:text-white">
-            <Smile className="w-6 h-6" />
+          <div className="p-3 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-700/60 rounded-xl text-neutral-800 dark:text-white">
+            <Smile className="w-6 h-6 text-apple-teal" />
           </div>
           <div>
             <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider block">Habit Discipline Rating</span>
-            <span className="text-xl font-black mt-0.5 block">{habitsScore}% completion</span>
+            <span className="text-xl font-black mt-0.5 block text-neutral-900 dark:text-white">{habitsScore}% completion</span>
           </div>
         </Card>
 
         <Card className="flex items-center gap-4">
-          <div className="p-3 bg-neutral-100 dark:bg-neutral-850 rounded-xl text-neutral-900 dark:text-white">
-            <FileText className="w-6 h-6" />
+          <div className="p-3 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-700/60 rounded-xl text-neutral-800 dark:text-white">
+            <FileText className="w-6 h-6 text-apple-blue" />
           </div>
           <div>
             <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider block">Journal Count (This Month)</span>
-            <span className="text-xl font-black mt-0.5 block">{journalFrequency} entries logged</span>
+            <span className="text-xl font-black mt-0.5 block text-neutral-900 dark:text-white">{journalFrequency} entries logged</span>
           </div>
         </Card>
       </div>
