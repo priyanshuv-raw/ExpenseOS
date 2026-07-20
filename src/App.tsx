@@ -15,6 +15,8 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { SearchPage } from './pages/SearchPage';
 import { SettingsPage } from './pages/SettingsPage';
 
+import { CloudSyncBar } from './components/CloudSyncBar';
+
 function App() {
   const [activeTab, setActiveTab] = useState<string>('calendar');
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(true);
@@ -120,11 +122,12 @@ function App() {
 
       {/* Main Content Workspace Layout */}
       <main 
-        className={`pt-6 pb-12 px-8 min-h-screen transition-all duration-300 ml-64 ${
+        className={`pt-0 pb-12 transition-all duration-300 ml-64 ${
           isRightSidebarOpen ? 'mr-80' : 'mr-0'
         }`}
       >
-        <div className="max-w-5xl mx-auto">
+        <CloudSyncBar />
+        <div className="max-w-5xl mx-auto pt-6 px-8">
           {renderPage()}
         </div>
       </main>
