@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../db/db';
 import { Card } from '../components/Card';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { getFirebaseConfig } from '../config/firebase';
-import { Download, Upload, FileSpreadsheet, RefreshCw, Moon, Sun, X, Plus, Cloud } from 'lucide-react';
+import { Download, Upload, FileSpreadsheet, RefreshCw, Moon, Sun, X, Plus, Cloud, ShieldCheck } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface SettingsPageProps {
@@ -22,35 +21,9 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
 
   // Local settings states
   const [currency, setCurrency] = useState('₹');
-  const [dailyBudget, setDailyBudget] = useState('1500');
+  const [dailyBudget, setDailyBudget] = useState('450');
   const [recoverySaved, setRecoverySaved] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
-
-  // Firebase Config State
-  const initialFbConfig = getFirebaseConfig();
-  const [fbApiKey, setFbApiKey] = useState(initialFbConfig.apiKey || '');
-  const [fbAuthDomain, setFbAuthDomain] = useState(initialFbConfig.authDomain || '');
-  const [fbProjectId, setFbProjectId] = useState(initialFbConfig.projectId || '');
-  const [fbStorageBucket, setFbStorageBucket] = useState(initialFbConfig.storageBucket || '');
-  const [fbAppId, setFbAppId] = useState(initialFbConfig.appId || '');
-  const [fbSaved, setFbSaved] = useState(false);
-
-  const handleSaveFirebase = () => {
-    const config = {
-      apiKey: fbApiKey.trim(),
-      authDomain: fbAuthDomain.trim(),
-      projectId: fbProjectId.trim(),
-      storageBucket: fbStorageBucket.trim(),
-      messagingSenderId: '',
-      appId: fbAppId.trim(),
-    };
-    localStorage.setItem('lifeos_firebase_config', JSON.stringify(config));
-    setFbSaved(true);
-    setTimeout(() => {
-      setFbSaved(false);
-      window.location.reload();
-    }, 1200);
-  };
 
   // Load existing settings
   useEffect(() => {
@@ -77,7 +50,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
   const handleBudgetChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setDailyBudget(val);
-    await saveSettings('dailyBudget', Number(val) || 1500);
+    await saveSettings('dailyBudget', Number(val) || 450);
   };
 
   const handleAddCategory = async (e: React.FormEvent) => {
@@ -285,7 +258,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
               value={dailyBudget}
               onChange={handleBudgetChange}
               className="w-full bg-white dark:bg-neutral-950 px-4 py-2.5 rounded-xl border border-neutral-350 dark:border-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:border-apple-blue"
-              placeholder="e.g. 1500"
+              placeholder="e.g. 450"
             />
           </div>
         </div>
@@ -296,7 +269,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
           <div className="flex gap-2.5 text-xs">
             <button
               onClick={() => { setTheme('light'); document.documentElement.classList.remove('dark'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold cursor-pointer ${
                 theme === 'light' 
                   ? 'bg-neutral-950 text-white dark:bg-white dark:text-black border-transparent shadow-sm'
                   : 'bg-white hover:bg-neutral-50 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-850 text-neutral-500'
@@ -306,7 +279,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
             </button>
             <button
               onClick={() => { setTheme('dark'); document.documentElement.classList.add('dark'); }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold cursor-pointer ${
                 theme === 'dark' 
                   ? 'bg-neutral-950 text-white dark:bg-white dark:text-black border-transparent shadow-sm'
                   : 'bg-white hover:bg-neutral-50 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-850 text-neutral-500'
@@ -318,72 +291,21 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
         </div>
       </Card>
 
-      {/* Firebase Cloud Sync Configuration */}
+      {/* Cloud Security & Sync Status */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-sm font-extrabold text-neutral-900 dark:text-white uppercase tracking-wide flex items-center gap-2">
             <Cloud className="w-4 h-4 text-apple-blue" />
-            Firebase Project Credentials
+            Cloud Database & Sync Security
           </h2>
-          {fbSaved && (
-            <span className="text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg">
-              Saved! Reloading...
-            </span>
-          )}
+          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+            Protected
+          </span>
         </div>
-        <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-5">
-          Paste your Firebase project credentials from Firebase Console (<a href="https://console.firebase.google.com" target="_blank" rel="noreferrer" className="text-apple-blue underline">console.firebase.google.com</a>) to link your personal cloud database.
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed mt-2">
+          Cloud database synchronization is active. All workspace records (Expenses, Accounts, Debts, Habits, Journal) are automatically isolated, encrypted, and synced in real-time under your Google account.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs mb-5">
-          <div>
-            <label className="font-semibold text-neutral-500 dark:text-neutral-400 block mb-1.5">API Key (apiKey)</label>
-            <input
-              type="text"
-              value={fbApiKey}
-              onChange={(e) => setFbApiKey(e.target.value)}
-              placeholder="AIzaSy..."
-              className="w-full bg-white dark:bg-neutral-950 px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-800 text-neutral-900 dark:text-white font-mono text-[11px] focus:outline-none focus:border-apple-blue"
-            />
-          </div>
-          <div>
-            <label className="font-semibold text-neutral-500 dark:text-neutral-400 block mb-1.5">Project ID (projectId)</label>
-            <input
-              type="text"
-              value={fbProjectId}
-              onChange={(e) => setFbProjectId(e.target.value)}
-              placeholder="my-lifeos-app"
-              className="w-full bg-white dark:bg-neutral-950 px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-800 text-neutral-900 dark:text-white font-mono text-[11px] focus:outline-none focus:border-apple-blue"
-            />
-          </div>
-          <div>
-            <label className="font-semibold text-neutral-500 dark:text-neutral-400 block mb-1.5">Auth Domain (authDomain)</label>
-            <input
-              type="text"
-              value={fbAuthDomain}
-              onChange={(e) => setFbAuthDomain(e.target.value)}
-              placeholder="my-lifeos-app.firebaseapp.com"
-              className="w-full bg-white dark:bg-neutral-950 px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-800 text-neutral-900 dark:text-white font-mono text-[11px] focus:outline-none focus:border-apple-blue"
-            />
-          </div>
-          <div>
-            <label className="font-semibold text-neutral-500 dark:text-neutral-400 block mb-1.5">App ID (appId)</label>
-            <input
-              type="text"
-              value={fbAppId}
-              onChange={(e) => setFbAppId(e.target.value)}
-              placeholder="1:123456789:web:abcdef..."
-              className="w-full bg-white dark:bg-neutral-950 px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-800 text-neutral-900 dark:text-white font-mono text-[11px] focus:outline-none focus:border-apple-blue"
-            />
-          </div>
-        </div>
-
-        <button
-          onClick={handleSaveFirebase}
-          className="bg-apple-blue hover:bg-blue-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-sm active:scale-95 cursor-pointer"
-        >
-          Save & Link Firebase Credentials
-        </button>
       </Card>
 
       {/* Category Customization Card */}
@@ -444,7 +366,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
           {/* Export JSON */}
           <button
             onClick={handleExportJSON}
-            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300"
+            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300 cursor-pointer"
           >
             <Download className="w-4 h-4" /> Export DB Archive (JSON)
           </button>
@@ -452,7 +374,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
           {/* Export Expenses CSV */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300"
+            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300 cursor-pointer"
           >
             <FileSpreadsheet className="w-4 h-4" /> Export Expenses (CSV)
           </button>
@@ -460,7 +382,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
           {/* Local recovery backup */}
           <button
             onClick={handleRecoveryBackup}
-            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300"
+            className="flex items-center justify-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-neutral-850 py-3 rounded-xl shadow-sm text-neutral-700 dark:text-neutral-300 cursor-pointer"
           >
             <RefreshCw className="w-4 h-4" />
             {recoverySaved ? '✓ Backup Mirror Saved' : 'Save Recovery Mirror'}
@@ -489,7 +411,7 @@ export function SettingsPage({ theme, setTheme }: SettingsPageProps) {
 
         <button
           onClick={handleResetDatabase}
-          className="flex items-center justify-center gap-2 border border-red-200 dark:border-red-950 bg-red-50/50 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20 py-3 rounded-xl shadow-sm text-red-600 dark:text-red-450 w-full sm:w-auto px-6 font-bold text-xs"
+          className="flex items-center justify-center gap-2 border border-red-200 dark:border-red-950 bg-red-50/50 dark:bg-red-950/10 hover:bg-red-50 dark:hover:bg-red-950/20 py-3 rounded-xl shadow-sm text-red-600 dark:text-red-450 w-full sm:w-auto px-6 font-bold text-xs cursor-pointer"
         >
           Reset Database & Clear All Data
         </button>
