@@ -33,7 +33,8 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
   const setCurrentDate = propSetCurrentDate || setInternalDate;
 
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'agenda'>('month');
-  const [selectedDayStr, setSelectedDayStr] = useState<string | null>(null);
+  const [selectedDayStr, setSelectedDayStr] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
+  const [showDailyPageModal, setShowDailyPageModal] = useState(false);
 
   const [showHealthModal, setShowHealthModal] = useState(false);
 
@@ -452,7 +453,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
         </div>
       </div>
 
-      {/* AGENDA FEED VIEW */}
+      {/* CALENDAR VIEW MODE (MONTH / WEEK / AGENDA) */}
       {viewMode === 'agenda' ? (
         <div className="flex flex-col gap-2.5">
           {days.filter(d => isSameMonth(d, currentDate)).map((date) => {
@@ -466,7 +467,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                 key={dateStr}
                 onClick={() => setSelectedDayStr(dateStr)}
                 className={`p-3.5 rounded-2xl cursor-pointer transition-all flex items-center justify-between gap-4 border ${
-                  isSelToday
+                  selectedDayStr === dateStr
                     ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-md'
                     : 'bg-white/80 dark:bg-[#0d1b2a]/60 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40'
                 }`}
@@ -519,164 +520,211 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
           })}
         </div>
       ) : (
-        <>
-          {/* Apple Calendar Week Day Labels */}
-          <div className="grid grid-cols-7 gap-1.5 md:gap-3 text-center border-b border-neutral-100 dark:border-neutral-800/80 pb-2">
-            {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d) => (
-              <span key={d} className="text-[10px] md:text-[11px] font-extrabold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+        <Card className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800 shadow-xs flex flex-col gap-3">
+          {/* Calendar Picker Header */}
+          <div className="flex items-center justify-between pb-1">
+            <button
+              onClick={handlePrev}
+              className="p-2 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer"
+              aria-label="Previous Month"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-extrabold text-neutral-900 dark:text-white tracking-tight">
+                {formattedMonthYear}
+              </h2>
+              <button
+                onClick={handleToday}
+                className="text-[10px] font-bold text-apple-blue bg-apple-blue/10 dark:bg-apple-blue/20 px-2 py-0.5 rounded-full border border-apple-blue/20 cursor-pointer"
+              >
+                Today
+              </button>
+            </div>
+
+            <button
+              onClick={handleNext}
+              className="p-2 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all cursor-pointer"
+              aria-label="Next Month"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Weekday Single Letter Header: S M T W T F S */}
+          <div className="grid grid-cols-7 gap-1 text-center border-b border-neutral-100 dark:border-neutral-800/60 pb-2">
+            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+              <span key={i} className="text-xs font-bold text-neutral-400 dark:text-neutral-500">
                 {d}
               </span>
             ))}
           </div>
 
-          {/* Apple Calendar Grid */}
-          <div className="grid grid-cols-7 gap-1.5 md:gap-3">
+          {/* Date Grid matching screenshot layout */}
+          <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
             {days.map((date, idx) => {
               const isCurrentMonth = isSameMonth(date, currentDate);
               const dateStr = format(date, 'yyyy-MM-dd');
+              const isSelected = selectedDayStr === dateStr;
               const isSelToday = isToday(date);
               const metrics = getDayMetrics(date);
 
               return (
-                <Card
+                <div
                   key={idx}
-                  hoverEffect={isCurrentMonth}
                   onClick={() => setSelectedDayStr(dateStr)}
-                  className={`min-h-[70px] md:min-h-[105px] flex flex-col justify-between cursor-pointer text-left select-none relative transition-all duration-200 rounded-xl md:rounded-2xl p-1.5 md:p-3 ${
-                    !isCurrentMonth 
-                      ? 'opacity-20 pointer-events-none' 
-                      : 'bg-white/80 dark:bg-[#0d1b2a]/60 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40 hover:shadow-md'
-                  } ${
-                    isSelToday 
-                      ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-lg shadow-apple-blue/10' 
-                      : ''
-                  }`}
+                  className="flex flex-col items-center justify-center cursor-pointer py-1 select-none group"
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <span className={`w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-[11px] md:text-xs font-black transition-all ${
-                      isSelToday 
-                        ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/30 scale-105' 
-                        : 'text-neutral-700 dark:text-neutral-200'
-                    }`}>
-                      {format(date, 'd')}
-                    </span>
-                    {/* Mood on top right */}
-                    {metrics.mood && (
-                      <span className="text-xs md:text-sm select-none leading-none drop-shadow-xs">{metrics.mood}</span>
-                    )}
+                  <div className={`w-9 h-9 rounded-2xl flex items-center justify-center text-xs transition-all ${
+                    isSelected
+                      ? 'bg-neutral-900 text-white dark:bg-apple-blue dark:text-white font-black shadow-md scale-105'
+                      : !isCurrentMonth
+                      ? 'text-neutral-300 dark:text-neutral-700 font-medium'
+                      : isSelToday
+                      ? 'border-2 border-apple-blue text-apple-blue font-extrabold'
+                      : 'text-neutral-800 dark:text-neutral-200 font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
+                  }`}>
+                    {format(date, 'd')}
                   </div>
 
-              {/* Day Metrics Node Indicators */}
-              <div className="flex flex-col gap-1.5 mt-3">
-                {/* Mobile Visual Dot Indicators */}
-                <div className="flex md:hidden items-center justify-center gap-1 mt-auto pt-1">
-                  {metrics.totalSpent > 0 && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-apple-red" />
-                  )}
-                  {metrics.dueFixedExpenses.length > 0 && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                  )}
-                  {metrics.dueDebts.length > 0 && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-apple-blue" />
-                  )}
-                  {metrics.habitPercent > 0 && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-apple-teal" />
-                  )}
-                </div>
-
-                {/* Desktop Detailed Chips */}
-                <div className="hidden md:flex flex-col gap-1 w-full">
-                  {/* 1. Spent + Sleep + Cigs — single line */}
-                  <div className="flex items-center gap-1 flex-wrap">
+                  {/* Activity Indicator Dots below date */}
+                  <div className="flex items-center gap-1 h-2 mt-0.5">
                     {metrics.totalSpent > 0 && (
-                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded tracking-tight ${
-                        metrics.totalSpent <= 450
-                          ? 'text-emerald-600 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-950/60 border border-emerald-500/20'
-                          : 'text-apple-red dark:text-red-400 bg-apple-red/10 dark:bg-red-950/60 border border-red-500/20'
-                      }`}>
-                        ₹{metrics.totalSpent.toLocaleString()}
-                      </span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-apple-red" />
                     )}
-                    {metrics.journalWritten && metrics.sleepHours > 0 && (
-                      <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/60 border border-indigo-500/20 px-1.5 py-0.5 rounded tracking-tight">
-                        💤{metrics.sleepHours}h
-                      </span>
+                    {metrics.habitPercent > 0 && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-apple-teal" />
                     )}
-                    {metrics.journalWritten && metrics.cigarettes > 0 && (
-                      <span className="text-[10px] font-bold text-orange-600 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/60 border border-orange-500/20 px-1.5 py-0.5 rounded tracking-tight">
-                        🚬{metrics.cigarettes}
-                      </span>
+                    {metrics.journalWritten && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                    )}
+                    {(metrics.dueDebts.length > 0 || metrics.dueFixedExpenses.length > 0) && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                     )}
                   </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      )}
 
-                  {/* 2. Debt / Receivable due pills */}
-                  {metrics.dueDebts.length > 0 && (
-                    <div className="flex flex-col gap-0.5">
-                      {metrics.dueDebts.map(debt => (
-                        <div
-                          key={debt.id}
-                          className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate border ${
-                            debt.direction === 'lent'
-                              ? 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
-                              : 'bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 border-red-500/20'
-                          }`}
-                          title={`${debt.direction === 'lent' ? '↗ Receivable' : '↙ Pay'}: ${debt.name} — ₹${debt.outstandingAmount.toLocaleString()}`}
-                        >
-                          <span>{debt.direction === 'lent' ? '↗' : '↙'}</span>
-                          <span className="truncate">{debt.name.length > 8 ? debt.name.slice(0, 8) + '…' : debt.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+      {/* SELECTED DATE DETAILS PANEL (Renders directly below calendar) */}
+      {selectedDayStr && (() => {
+        const selectedDateObj = parseISO(selectedDayStr);
+        const selectedMetrics = getDayMetrics(selectedDateObj);
+        const selectedDayExpenses = expenses.filter(e => e.date === selectedDayStr);
 
-                  {/* 3. Fixed recurring due pills */}
-                  {metrics.dueFixedExpenses.length > 0 && (
-                    <div className="flex flex-col gap-0.5">
-                      {metrics.dueFixedExpenses.map(fe => {
-                        const isIncome = fe.category === 'Income';
-                        return (
-                          <div
-                            key={fe.id}
-                            className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold leading-none truncate border ${
-                              isIncome
-                                ? 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
-                                : 'bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 border-red-500/20'
-                            }`}
-                            title={`${isIncome ? '↑ Income' : '↓ Expense'}: ${fe.name} — ₹${fe.amount.toLocaleString()} (${fe.repeat})`}
-                          >
-                            <span>{isIncome ? '↑' : '↓'}</span>
-                            <span className="truncate">{fe.name.length > 8 ? fe.name.slice(0, 8) + '…' : fe.name}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+        return (
+          <div className="flex flex-col gap-4 mt-2">
+            <div className="flex justify-between items-center px-1">
+              <h3 className="text-sm font-extrabold text-neutral-800 dark:text-neutral-200 tracking-tight">
+                Details — {format(selectedDateObj, 'MMMM d, yyyy')}
+              </h3>
+              <button
+                onClick={() => setShowDailyPageModal(true)}
+                className="text-xs font-bold text-apple-blue hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                Full Day Log <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-                  {/* 3. Habit bar */}
-                  {metrics.habitPercent > 0 && (
-                    <div className="w-full mt-auto pt-1">
-                      <div className="w-full h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-apple-teal rounded-full transition-all duration-350"
-                          style={{ width: `${metrics.habitPercent}%` }}
-                        />
-                      </div>
-                    </div>
+            {/* Details Cards Container */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Card 1: Daily Check-in & Recovery */}
+              <Card className="p-4 rounded-2xl flex flex-col justify-between gap-3 bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+                    Daily Check-in
+                  </span>
+                  {selectedMetrics.mood && (
+                    <span className="text-xl">{selectedMetrics.mood}</span>
                   )}
                 </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-    </>
-  )}
+
+                <div className="grid grid-cols-3 gap-2 text-center pt-1">
+                  <div className="bg-neutral-50 dark:bg-neutral-900/60 p-2 rounded-xl border border-neutral-100 dark:border-neutral-800">
+                    <span className="text-[9px] font-bold text-neutral-400 block">Spent</span>
+                    <span className={`text-sm font-black ${selectedMetrics.totalSpent > 0 ? 'text-apple-red' : 'text-neutral-700 dark:text-neutral-300'}`}>
+                      ₹{selectedMetrics.totalSpent.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="bg-neutral-50 dark:bg-neutral-900/60 p-2 rounded-xl border border-neutral-100 dark:border-neutral-800">
+                    <span className="text-[9px] font-bold text-neutral-400 block">Sleep</span>
+                    <span className="text-sm font-black text-indigo-500">
+                      {selectedMetrics.sleepHours ? `${selectedMetrics.sleepHours}h` : '—'}
+                    </span>
+                  </div>
+                  <div className="bg-neutral-50 dark:bg-neutral-900/60 p-2 rounded-xl border border-neutral-100 dark:border-neutral-800">
+                    <span className="text-[9px] font-bold text-neutral-400 block">Habits</span>
+                    <span className="text-sm font-black text-apple-teal">
+                      {selectedMetrics.habitPercent}%
+                    </span>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Card 2: Transactions / Expenses */}
+              <Card className="p-4 rounded-2xl flex flex-col gap-3 bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+                    Expenses ({selectedDayExpenses.length})
+                  </span>
+                  <span className="text-xs font-black text-neutral-900 dark:text-white">
+                    Total: ₹{selectedMetrics.totalSpent.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1">
+                  {selectedDayExpenses.length > 0 ? (
+                    selectedDayExpenses.map(exp => (
+                      <div key={exp.id} className="flex justify-between items-center text-xs py-1 border-b border-neutral-100 dark:border-neutral-800/60 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
+                            {exp.category}
+                          </span>
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200">{exp.description || exp.category}</span>
+                        </div>
+                        <span className="font-bold text-apple-red">₹{exp.amount.toLocaleString()}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="text-xs text-neutral-400 italic">No expenses logged for this date.</span>
+                  )}
+                </div>
+              </Card>
+
+              {/* Card 3: Due Bills & Debts */}
+              {(selectedMetrics.dueDebts.length > 0 || selectedMetrics.dueFixedExpenses.length > 0) && (
+                <Card className="p-4 rounded-2xl flex flex-col gap-2.5 bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800 md:col-span-2">
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+                    Scheduled Payments & Due Bills
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedMetrics.dueDebts.map(d => (
+                      <span key={d.id} className="px-2.5 py-1 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        {d.direction === 'lent' ? '↗ Receivable' : '↙ Debt Due'}: {d.name} (₹{d.outstandingAmount.toLocaleString()})
+                      </span>
+                    ))}
+                    {selectedMetrics.dueFixedExpenses.map(fe => (
+                      <span key={fe.id} className="px-2.5 py-1 rounded-xl text-xs font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                        {fe.category === 'Income' ? '↑ Recurring Income' : '↓ Recurring Bill'}: {fe.name} (₹{fe.amount.toLocaleString()})
+                      </span>
+                    ))}
+                  </div>
+                </Card>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Sliding daily drawer page */}
-      {selectedDayStr && (
+      {showDailyPageModal && selectedDayStr && (
         <DailyPage 
           dateStr={selectedDayStr} 
-          onClose={() => setSelectedDayStr(null)} 
+          onClose={() => setShowDailyPageModal(false)} 
         />
       )}
 
