@@ -22,7 +22,7 @@ import {
   onAuthStateChanged, 
   type User 
 } from '../config/firebase';
-import { initFirebaseSync } from '../db/firebaseSync';
+import { initFirebaseSync, onSyncSuccess } from '../db/firebaseSync';
 import { format } from 'date-fns';
 
 interface SidebarProps {
@@ -42,11 +42,17 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
       setUser(u);
       setLastSyncTime(format(new Date(), 'HH:mm'));
     });
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLastSyncTime(format(new Date(), 'HH:mm'));
     });
-    return () => unsubscribe();
+    const unsubscribeSync = onSyncSuccess((date) => {
+      setLastSyncTime(format(date, 'HH:mm'));
+    });
+    return () => {
+      unsubscribeAuth();
+      unsubscribeSync();
+    };
   }, []);
 
   const handleLogin = async () => {

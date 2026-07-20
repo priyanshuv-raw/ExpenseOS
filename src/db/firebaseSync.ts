@@ -9,6 +9,26 @@ let pushTimeout: any = null;
 // Real-time listener cleanup handle
 let unsubscribeSnapshot: (() => void) | null = null;
 
+// Sync Listeners
+type SyncListener = (timestamp: Date) => void;
+const syncListeners: Set<SyncListener> = new Set();
+
+export function onSyncSuccess(listener: SyncListener) {
+  syncListeners.add(listener);
+  return () => {
+    syncListeners.delete(listener);
+  };
+}
+
+function notifySyncSuccess() {
+  const now = new Date();
+  syncListeners.forEach(fn => {
+    try {
+      fn(now);
+    } catch (e) {}
+  });
+}
+
 /**
  * Completely clears local Dexie IndexedDB tables
  */
@@ -78,6 +98,7 @@ export async function pushLocalToFirebase(userId?: string) {
       const userDocRef = doc(dbFirestore, 'users', targetUid);
       await setDoc(userDocRef, data, { merge: true });
       console.log('☁️ Successfully synced data to Firestore Cloud!');
+      notifySyncSuccess();
     } catch (err: any) {
       console.error('Firebase Cloud Push Error:', err);
     }
@@ -140,6 +161,7 @@ export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
             if (cloudData.scheduledTransactions?.length) await db.scheduledTransactions.bulkPut(cloudData.scheduledTransactions);
           });
           isSyncingFromCloud = false;
+          notifySyncSuccess();
         } else {
           // Brand-new user: wipe local IndexedDB clean so they get a 100% fresh empty workspace
           await clearLocalDatabase();
@@ -191,6 +213,7 @@ export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
             await db.scheduledTransactions.clear();
             if (cloudData.scheduledTransactions?.length) await db.scheduledTransactions.bulkPut(cloudData.scheduledTransactions);
           });
+          notifySyncSuccess();
         } catch (err) {
           console.error('Error hydrating from Firebase Cloud:', err);
         } finally {
