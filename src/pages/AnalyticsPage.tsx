@@ -24,6 +24,8 @@ export function AnalyticsPage() {
   const habits = useLiveQuery(() => db.habits.toArray()) || [];
   const logs = useLiveQuery(() => db.habitLogs.toArray()) || [];
   const journals = useLiveQuery(() => db.journal.toArray()) || [];
+  const dailyBudgetSetting = useLiveQuery(() => db.settings.get('dailyBudget'));
+  const dailyBudget = dailyBudgetSetting ? Number(dailyBudgetSetting.value) : 450;
 
   // Theme support helper (Vibrant Apple system colors)
   const isDarkMode = document.documentElement.classList.contains('dark');
@@ -400,6 +402,7 @@ export function AnalyticsPage() {
         outstanding={outstanding}
         habitsLogs={logs}
         activeHabits={habits}
+        dailyBudget={dailyBudget}
       />
     </div>
   );

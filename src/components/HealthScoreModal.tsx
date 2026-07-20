@@ -24,7 +24,7 @@ export function HealthScoreModal({
   outstanding,
   habitsLogs,
   activeHabits,
-  dailyBudget = 1500,
+  dailyBudget = 450,
 }: HealthScoreModalProps) {
   if (!isOpen) return null;
 

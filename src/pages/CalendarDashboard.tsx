@@ -47,6 +47,8 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
   const accounts = useLiveQuery(() => db.accounts.toArray()) || [];
   const outstanding = useLiveQuery(() => db.outstanding.filter(o => o.status === 'active').toArray()) || [];
   const fixedExpenses = useLiveQuery(() => db.fixedExpenses.toArray()) || [];
+  const dailyBudgetSetting = useLiveQuery(() => db.settings.get('dailyBudget'));
+  const dailyBudget = dailyBudgetSetting ? Number(dailyBudgetSetting.value) : 450;
 
   const todayStr = format(new Date(), 'yyyy-MM-dd');
   const pendingNudges = useLiveQuery(() => 
@@ -598,6 +600,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
         outstanding={outstanding}
         habitsLogs={habitsLogs}
         activeHabits={activeHabits}
+        dailyBudget={dailyBudget}
       />
     </div>
   );
