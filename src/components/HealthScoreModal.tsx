@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, ShieldAlert, CheckCircle2, AlertTriangle, Lightbulb, Target } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, getDaysInMonth } from 'date-fns';
 import { type Expense, type FixedExpense, type OutstandingDebt, type HabitLog, type Habit } from '../db/db';
 
 interface HealthScoreModalProps {
@@ -37,7 +37,7 @@ export function HealthScoreModal({
   const monthSpent = monthExpenses.filter(e => e.category !== 'Income').reduce((sum, e) => sum + e.amount, 0);
 
   // Budget calculations
-  const totalDaysInMonth = 30;
+  const totalDaysInMonth = getDaysInMonth(currentDate);
   const monthlyBudgetLimit = dailyBudget * totalDaysInMonth;
   const budgetRatio = monthSpent / (monthlyBudgetLimit || 1);
 
