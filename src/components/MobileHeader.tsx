@@ -1,7 +1,8 @@
 import React from 'react';
 import type { User } from '../config/firebase';
-import { Menu, PieChart, Moon, Sun, Compass } from 'lucide-react';
+import { Menu, PieChart, Moon, Sun } from 'lucide-react';
 import { format } from 'date-fns';
+import { DayledgeIcon } from './DayledgeLogo';
 
 interface MobileHeaderProps {
   user: User | null;
@@ -49,7 +50,7 @@ export function MobileHeader({
               className="w-6 h-6 rounded-full border border-neutral-200 dark:border-neutral-700" 
             />
           ) : (
-            <Compass className="w-5 h-5 text-apple-blue" />
+            <DayledgeIcon size={22} />
           )}
           {user && (
             <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-neutral-950" />

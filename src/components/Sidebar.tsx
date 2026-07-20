@@ -25,6 +25,7 @@ import {
 } from '../config/firebase';
 import { initFirebaseSync, onSyncSuccess } from '../db/firebaseSync';
 import { format } from 'date-fns';
+import { DayledgeLogo } from './DayledgeLogo';
 
 interface SidebarProps {
   activeTab: string;
@@ -123,15 +124,7 @@ export function Sidebar({
         <div className="flex flex-col gap-6">
           {/* Brand / Logo */}
           <div className="flex items-center justify-between px-2 pt-2">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-apple-blue flex items-center justify-center shadow-md shadow-apple-blue/30">
-                <Compass className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-md font-bold tracking-tight text-neutral-950 dark:text-neutral-50 font-sans">Dayledge</h1>
-                <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider">Workspace</p>
-              </div>
-            </div>
+            <DayledgeLogo iconSize={34} textClassName="text-lg font-extrabold tracking-tight" />
 
             {/* Mobile Close Button */}
             {onCloseMobile && (
