@@ -128,7 +128,7 @@ export function Sidebar({
                 <Compass className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-md font-bold tracking-tight text-neutral-950 dark:text-neutral-50 font-sans">Life OS</h1>
+                <h1 className="text-md font-bold tracking-tight text-neutral-950 dark:text-neutral-50 font-sans">Dayledge</h1>
                 <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider">Workspace</p>
               </div>
             </div>

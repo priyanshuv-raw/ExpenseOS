@@ -30,7 +30,7 @@ export function MobileHeader({
       case 'statistics': return 'Analytics';
       case 'search': return 'Search & Logs';
       case 'settings': return 'Settings';
-      default: return 'Life OS';
+      default: return 'Dayledge';
     }
   };
 

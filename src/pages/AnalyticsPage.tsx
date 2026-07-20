@@ -165,7 +165,7 @@ export function AnalyticsPage() {
             <Heart className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider block">Life OS Health Score</span>
+            <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider block">Dayledge Health Score</span>
             <span className="text-xl font-black mt-0.5 block text-neutral-900 dark:text-white">{overallHealthScore}/100</span>
           </div>
         </Card>
