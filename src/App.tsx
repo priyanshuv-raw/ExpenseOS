@@ -122,12 +122,11 @@ function App() {
 
       {/* Main Content Workspace Layout */}
       <main 
-        className={`pt-0 pb-12 transition-all duration-300 ml-64 ${
+        className={`pt-6 pb-12 px-8 transition-all duration-300 ml-64 ${
           isRightSidebarOpen ? 'mr-80' : 'mr-0'
         }`}
       >
-        <CloudSyncBar />
-        <div className="max-w-5xl mx-auto pt-6 px-8">
+        <div className="max-w-5xl mx-auto">
           {renderPage()}
         </div>
       </main>
