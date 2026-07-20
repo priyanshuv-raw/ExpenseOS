@@ -210,10 +210,13 @@ export function RightSidebar({ isOpen, setIsOpen, selectedDate = new Date() }: R
         />
       )}
 
-      {/* Desktop Toggle button */}
+      {/* Desktop Floating Border Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`hidden md:flex fixed top-6 right-6 z-20 w-8 h-8 rounded-full items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-all`}
+        className={`hidden md:flex ${
+          isOpen ? 'fixed right-80 -mr-3.5' : 'fixed right-3.5'
+        } top-6 z-50 w-7 h-7 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-md items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:scale-110 active:scale-95 transition-all cursor-pointer`}
+        title={isOpen ? "Collapse Summary Sidebar" : "Expand Summary Sidebar"}
       >
         {isOpen ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>
