@@ -200,7 +200,7 @@ export function FloatingAddButton() {
 
   return (
     <>
-      <div className="fixed bottom-24 md:bottom-8 right-5 md:right-6 z-40">
+      <div className="fixed bottom-22 md:bottom-8 right-5 md:right-6 z-40">
       {/* Dim backdrop when menu is expanded */}
       {isOpen && (
         <div 

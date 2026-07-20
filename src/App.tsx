@@ -172,7 +172,7 @@ function App() {
 
       {/* Main Content Workspace Layout */}
       <main 
-        className={`pt-16 md:pt-6 pb-24 md:pb-12 px-3 md:px-8 transition-all duration-300 ml-0 ${
+        className={`pt-16 md:pt-6 pb-36 md:pb-12 px-3 md:px-8 transition-all duration-300 ml-0 ${
           isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
         } ${
           isRightSidebarOpen ? 'mr-0 md:mr-80' : 'mr-0'
