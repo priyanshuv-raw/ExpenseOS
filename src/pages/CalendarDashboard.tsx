@@ -474,7 +474,7 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                   : ''
               }`}
             >
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center justify-between w-full">
                 <span className={`text-xs font-bold ${
                   isSelToday 
                     ? 'text-apple-blue dark:text-apple-blue font-extrabold' 
@@ -482,16 +482,11 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                 }`}>
                   {format(date, 'd')}
                 </span>
-                {/* Mood alongside date */}
+                {/* Mood on top right */}
                 {metrics.mood && (
                   <span className="text-sm select-none leading-none">{metrics.mood}</span>
                 )}
               </div>
-
-              {/* Purple journal dot — top right */}
-              {metrics.journalWritten && (
-                <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-apple-purple" title="Journal Written" />
-              )}
 
               {/* Day Metrics Node Indicators */}
               <div className="flex flex-col gap-1.5 mt-3">
