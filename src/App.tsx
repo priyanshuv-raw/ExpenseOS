@@ -88,6 +88,18 @@ function App() {
     await db.settings.put({ key: 'theme', value: nextTheme });
   };
 
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('dayledge_sidebar_collapsed') === 'true';
+  });
+
+  const toggleSidebarCollapse = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('dayledge_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
   const [calendarDate, setCalendarDate] = useState<Date>(new Date());
 
   // Switch pages based on active tab
@@ -145,11 +157,15 @@ function App() {
         toggleTheme={toggleTheme} 
         isMobileOpen={isMobileLeftOpen}
         onCloseMobile={() => setIsMobileLeftOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebarCollapse}
       />
 
       {/* Main Content Workspace Layout */}
       <main 
-        className={`pt-16 md:pt-6 pb-24 md:pb-12 px-3 md:px-8 transition-all duration-300 ml-0 md:ml-64 ${
+        className={`pt-16 md:pt-6 pb-24 md:pb-12 px-3 md:px-8 transition-all duration-300 ml-0 ${
+          isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
+        } ${
           isRightSidebarOpen ? 'mr-0 md:mr-80' : 'mr-0'
         }`}
       >
