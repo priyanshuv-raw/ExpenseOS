@@ -33,6 +33,9 @@ export function CloudSyncBar() {
   };
 
   const handleLogout = async () => {
+    if (!window.confirm('Are you sure you want to sign out of your Dayledge account?')) {
+      return;
+    }
     try {
       setLoading(true);
       await logoutUser();
