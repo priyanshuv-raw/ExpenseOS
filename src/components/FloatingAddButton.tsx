@@ -470,34 +470,10 @@ export function FloatingAddButton() {
                   <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider">Sleep & Recovery</span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase block mb-1.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-indigo-300" /> Bedtime
-                    </label>
-                    <input
-                      type="time"
-                      value={sleepTime}
-                      onChange={(e) => setSleepTime(e.target.value)}
-                      className="w-full bg-white dark:bg-neutral-950 px-3 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 focus:outline-none focus:border-apple-blue text-xs text-neutral-900 dark:text-white"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase block mb-1.5 flex items-center gap-1">
-                      <Sun className="w-3 h-3 text-apple-orange" /> Wake Time
-                    </label>
-                    <input
-                      type="time"
-                      value={wakeTime}
-                      onChange={(e) => setWakeTime(e.target.value)}
-                      className="w-full bg-white dark:bg-neutral-950 px-3 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 focus:outline-none focus:border-apple-blue text-xs text-neutral-900 dark:text-white"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase block mb-1.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-apple-blue" /> Sleep Hours
+                      <Clock className="w-3.5 h-3.5 text-apple-blue" /> Sleep Hours
                     </label>
                     <input
                       type="number"
@@ -511,8 +487,8 @@ export function FloatingAddButton() {
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-center text-[10px] font-bold text-neutral-455 dark:text-neutral-500 uppercase mb-1">
-                      <span>Energy</span>
+                    <div className="flex justify-between items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase mb-1.5">
+                      <span>Energy Rating</span>
                       <span className="text-apple-orange font-bold">{energy}/5</span>
                     </div>
                     <input

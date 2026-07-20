@@ -442,16 +442,16 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
         </div>
       </div>
 
-      {/* Week Day Labels */}
-      <div className="grid grid-cols-7 gap-3 text-center">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-          <span key={d} className="text-xs font-bold text-neutral-400 dark:text-neutral-550 uppercase tracking-widest">
+      {/* Apple Calendar Week Day Labels */}
+      <div className="grid grid-cols-7 gap-3 text-center border-b border-neutral-100 dark:border-neutral-800/80 pb-2">
+        {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d) => (
+          <span key={d} className="text-[11px] font-extrabold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
             {d}
           </span>
         ))}
       </div>
 
-      {/* Calendar Grid */}
+      {/* Apple Calendar Grid */}
       <div className="grid grid-cols-7 gap-3">
         {days.map((date, idx) => {
           const isCurrentMonth = isSameMonth(date, currentDate);
@@ -464,27 +464,27 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
               key={idx}
               hoverEffect={isCurrentMonth}
               onClick={() => setSelectedDayStr(dateStr)}
-              className={`min-h-[110px] flex flex-col justify-between cursor-pointer text-left select-none relative transition-all duration-200 ${
+              className={`min-h-[115px] flex flex-col justify-between cursor-pointer text-left select-none relative transition-all duration-200 rounded-2xl p-3 ${
                 !isCurrentMonth 
-                  ? 'opacity-25 pointer-events-none' 
-                  : 'bg-white/60 dark:bg-neutral-900/20'
+                  ? 'opacity-20 pointer-events-none' 
+                  : 'bg-white/70 dark:bg-[#0d1b2a]/50 border-neutral-200/60 dark:border-neutral-800/80 hover:border-apple-blue/40 hover:shadow-md'
               } ${
                 isSelToday 
-                  ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-neutral-900 shadow-md shadow-apple-blue/5' 
+                  ? 'ring-2 ring-apple-blue border-transparent bg-white dark:bg-[#0d1b2a] shadow-lg shadow-apple-blue/10' 
                   : ''
               }`}
             >
               <div className="flex items-center justify-between w-full">
-                <span className={`text-xs font-bold ${
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all ${
                   isSelToday 
-                    ? 'text-apple-blue dark:text-apple-blue font-extrabold' 
-                    : 'text-neutral-600 dark:text-neutral-400'
+                    ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/30 scale-105' 
+                    : 'text-neutral-700 dark:text-neutral-200'
                 }`}>
                   {format(date, 'd')}
                 </span>
                 {/* Mood on top right */}
                 {metrics.mood && (
-                  <span className="text-sm select-none leading-none">{metrics.mood}</span>
+                  <span className="text-sm select-none leading-none drop-shadow-xs">{metrics.mood}</span>
                 )}
               </div>
 

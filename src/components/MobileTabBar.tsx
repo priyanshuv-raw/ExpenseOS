@@ -103,7 +103,7 @@ export function MobileTabBar({ activeTab, setActiveTab }: MobileTabBarProps) {
       )}
 
       {/* iOS Bottom Navigation Bar */}
-      <nav className="flex md:hidden items-center justify-around fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-2xl border-t border-neutral-200/60 dark:border-neutral-800/60 py-2 px-2 pb-safe transition-colors shadow-lg">
+      <nav className="flex md:hidden items-center justify-around fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0d1b2a]/95 backdrop-blur-2xl border-t border-neutral-200/70 dark:border-neutral-800/80 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] px-3 transition-colors shadow-2xl">
         {mainTabs.map(tab => {
           const Icon = tab.icon;
           const isActive = tab.id === 'more' ? (isMoreActive || showMoreMenu) : activeTab === tab.id;
@@ -111,16 +111,16 @@ export function MobileTabBar({ activeTab, setActiveTab }: MobileTabBarProps) {
             <button
               key={tab.id}
               onClick={() => handleTabClick(tab.id)}
-              className={`flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all active:scale-95 ${
+              className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all active:scale-95 cursor-pointer ${
                 isActive 
                   ? 'text-apple-blue font-bold' 
-                  : 'text-neutral-450 dark:text-neutral-500'
+                  : 'text-neutral-450 dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
               }`}
             >
-              <div className={`p-1 rounded-xl transition-all ${isActive ? 'bg-apple-blue/10 dark:bg-apple-blue/20 text-apple-blue' : ''}`}>
-                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.4px]' : 'stroke-[1.75px]'}`} />
+              <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-apple-blue/15 dark:bg-apple-blue/25 text-apple-blue shadow-xs' : ''}`}>
+                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.8px]'}`} />
               </div>
-              <span className="text-[10px] tracking-tight font-medium">{tab.label}</span>
+              <span className="text-[10px] tracking-tight font-semibold">{tab.label}</span>
             </button>
           );
         })}
