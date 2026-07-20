@@ -199,64 +199,69 @@ export function FloatingAddButton() {
   };
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-5 md:right-6 z-40">
+    <>
+      <div className="fixed bottom-24 md:bottom-8 right-5 md:right-6 z-40">
+      {/* Dim backdrop when menu is expanded */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs z-30"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
       {/* Menu Options */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 flex flex-col gap-2.5 items-end mb-1">
-          {/* Quick Expense */}
-          <div className="flex items-center gap-3 group">
-            <span className="bg-white dark:bg-neutral-900 px-2.5 py-1.5 rounded-lg border border-neutral-100 dark:border-neutral-800 text-xs font-semibold shadow-sm text-neutral-600 dark:text-neutral-350 select-none opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute bottom-16 right-0 z-40 flex flex-col gap-3 items-end mb-2 animate-scale-up">
+          {/* Option 1: Quick Expense */}
+          <div 
+            onClick={() => { setActiveModal('expense'); setIsOpen(false); }}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <span className="bg-white dark:bg-[#0d1b2a] px-3 py-1.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-xs font-bold shadow-md text-neutral-800 dark:text-white whitespace-nowrap select-none group-hover:border-apple-blue transition-colors">
               Add Expense <span className="text-[10px] text-neutral-400 font-normal ml-1">⌥E</span>
             </span>
             <button
-              onClick={() => { setActiveModal('expense'); setIsOpen(false); }}
-              className="w-11 h-11 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-855 dark:text-neutral-100 shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+              type="button"
+              className="w-12 h-12 rounded-full bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-center text-neutral-800 dark:text-white shadow-lg group-hover:scale-110 group-hover:border-apple-blue group-hover:text-apple-blue transition-all cursor-pointer"
             >
-              <Receipt className="w-4.5 h-4.5" />
+              <Receipt className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Quick Journal */}
-          <div className="flex items-center gap-3 group">
-            <span className="bg-white dark:bg-neutral-900 px-2.5 py-1.5 rounded-lg border border-neutral-100 dark:border-neutral-800 text-xs font-semibold shadow-sm text-neutral-600 dark:text-neutral-350 select-none opacity-0 group-hover:opacity-100 transition-opacity">
-              Write Journal <span className="text-[10px] text-neutral-400 font-normal ml-1">⌥J</span>
-            </span>
-            <button
-              onClick={() => { setActiveModal('journal'); loadTodayJournal(); setIsOpen(false); }}
-              className="w-11 h-11 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-855 dark:text-neutral-100 shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-            >
-              <BookOpen className="w-4.5 h-4.5" />
-            </button>
-          </div>
-
-          {/* Quick Habits */}
-          <div className="flex items-center gap-3 group">
-            <span className="bg-white dark:bg-neutral-900 px-2.5 py-1.5 rounded-lg border border-neutral-100 dark:border-neutral-800 text-xs font-semibold shadow-sm text-neutral-600 dark:text-neutral-350 select-none opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Option 2: Quick Habits */}
+          <div 
+            onClick={() => { setActiveModal('habits'); setIsOpen(false); }}
+            className="flex items-center gap-2.5 cursor-pointer group"
+          >
+            <span className="bg-white dark:bg-[#0d1b2a] px-3 py-1.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 text-xs font-bold shadow-md text-neutral-800 dark:text-white whitespace-nowrap select-none group-hover:border-apple-blue transition-colors">
               Log Habits <span className="text-[10px] text-neutral-400 font-normal ml-1">⌥H</span>
             </span>
             <button
-              onClick={() => { setActiveModal('habits'); setIsOpen(false); }}
-              className="w-11 h-11 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-855 dark:text-neutral-100 shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+              type="button"
+              className="w-12 h-12 rounded-full bg-white dark:bg-[#0d1b2a] border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-center text-neutral-800 dark:text-white shadow-lg group-hover:scale-110 group-hover:border-apple-blue group-hover:text-apple-blue transition-all cursor-pointer"
             >
-              <CheckSquare className="w-4.5 h-4.5" />
+              <CheckSquare className="w-5 h-5" />
             </button>
           </div>
         </div>
       )}
 
-      {/* Main floating button */}
+      {/* Main floating action button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform duration-200"
+        className="relative z-40 w-14 h-14 rounded-full bg-apple-blue text-white flex items-center justify-center shadow-xl shadow-apple-blue/30 hover:scale-105 active:scale-95 transition-transform duration-200 cursor-pointer"
+        aria-label="Add Action Menu"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+        {isOpen ? <X className="w-6 h-6" /> : <Plus className="w-6 h-6 stroke-[2.5px]" />}
       </button>
+    </div>
 
-      {/* ================= MODAL SHEETS ================= */}
+    {/* ================= MODAL SHEETS ================= */}
 
-      {/* 1. Add Expense Modal */}
-      {activeModal === 'expense' && (
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+    {/* 1. Add Expense Modal */}
+    {activeModal === 'expense' && (
+      <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto animate-slide-up sm:animate-none">
             {/* iOS Grab Bar */}
             <div className="w-10 h-1 bg-neutral-300 dark:bg-neutral-700 rounded-full mx-auto mb-4 sm:hidden" />
@@ -632,6 +637,6 @@ export function FloatingAddButton() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
