@@ -6,12 +6,18 @@
   --font-sans: "SF Pro Display", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
   --font-mono: "SF Mono", "ui-monospace", "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
   
-  --color-apple-blue: #007aff;
+  --color-dayledge-teal: #26bba3;
+  --color-dayledge-navy: #0d1b2a;
+  --color-dayledge-dark: #070d18;
+  --color-dayledge-accent: #14b8a6;
+
+  /* Brand Theme Mapping */
+  --color-apple-blue: #26bba3;
+  --color-apple-teal: #26bba3;
+  --color-apple-purple: #14b8a6;
   --color-apple-red: #ff3b30;
-  --color-apple-green: #34c759;
+  --color-apple-green: #26bba3;
   --color-apple-orange: #ff9500;
-  --color-apple-purple: #af52de;
-  --color-apple-teal: #00c7be;
   --color-apple-pink: #ff2d55;
   --color-apple-indigo: #5856d6;
 }
@@ -21,16 +27,16 @@ html, body, #root {
   padding: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
-  background-color: #fcfcfc;
-  color: #1c1c1e;
+  background-color: #fcfdfe;
+  color: #0f172a;
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
 }
 
-/* Dark mode styling */
+/* Dark mode styling matching Dayledge Navy Logo background */
 html.dark, html.dark body, html.dark #root {
-  background-color: #010102;
-  color: #f2f2f7;
+  background-color: #070d18;
+  color: #f1f5f9;
 }
 
 /* Input Placeholder Contrast Fixes */
