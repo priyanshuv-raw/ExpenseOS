@@ -202,19 +202,25 @@ export function RightSidebar({ isOpen, setIsOpen, selectedDate = new Date() }: R
 
   return (
     <>
-      {/* Toggle button */}
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          onClick={() => setIsOpen(false)} 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm animate-fade-in"
+        />
+      )}
+
+      {/* Desktop Toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed top-6 right-6 z-20 w-8 h-8 rounded-full flex items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-all ${
-          isOpen ? 'mr-0' : 'mr-0'
-        }`}
+        className={`hidden md:flex fixed top-6 right-6 z-20 w-8 h-8 rounded-full items-center justify-center border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-all`}
       >
         {isOpen ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>
 
       {/* Sidebar container */}
       <aside 
-        className={`w-80 h-screen fixed right-0 top-0 border-l border-neutral-100 dark:border-neutral-900 bg-white/50 dark:bg-neutral-950/50 backdrop-blur-md p-6 overflow-y-auto z-10 transition-transform duration-300 ${
+        className={`w-80 max-w-[85vw] h-screen fixed right-0 top-0 border-l border-neutral-100 dark:border-neutral-900 bg-white/95 dark:bg-neutral-950/95 md:bg-white/50 md:dark:bg-neutral-950/50 backdrop-blur-xl p-6 overflow-y-auto z-50 md:z-10 transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

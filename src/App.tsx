@@ -4,6 +4,9 @@ import { runFixedExpensesEngine } from './db/fixedExpensesEngine';
 import { Sidebar } from './components/Sidebar';
 import { RightSidebar } from './components/RightSidebar';
 import { FloatingAddButton } from './components/FloatingAddButton';
+import { MobileHeader } from './components/MobileHeader';
+import { MobileTabBar } from './components/MobileTabBar';
+import { auth, onAuthStateChanged, type User } from './config/firebase';
 
 // Pages
 import { CalendarDashboard } from './pages/CalendarDashboard';
@@ -15,13 +18,25 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { SearchPage } from './pages/SearchPage';
 import { SettingsPage } from './pages/SettingsPage';
 
-import { CloudSyncBar } from './components/CloudSyncBar';
-
 function App() {
   const [activeTab, setActiveTab] = useState<string>('calendar');
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(true);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(false);
+  const [isMobileLeftOpen, setIsMobileLeftOpen] = useState<boolean>(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [dbInitialized, setDbInitialized] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, u => setUser(u));
+    return () => unsub();
+  }, []);
+
+  // Open right sidebar by default on desktop screens
+  useEffect(() => {
+    if (window.innerWidth >= 768) {
+      setIsRightSidebarOpen(true);
+    }
+  }, []);
 
   // Initialize DB and Seed
   useEffect(() => {
@@ -112,18 +127,30 @@ function App() {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
+      {/* Mobile Top Header */}
+      <MobileHeader 
+        user={user}
+        onOpenLeftSidebar={() => setIsMobileLeftOpen(true)}
+        onOpenRightSidebar={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        activeTab={activeTab}
+      />
+
       {/* Navigation Left Sidebar */}
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         theme={theme} 
         toggleTheme={toggleTheme} 
+        isMobileOpen={isMobileLeftOpen}
+        onCloseMobile={() => setIsMobileLeftOpen(false)}
       />
 
       {/* Main Content Workspace Layout */}
       <main 
-        className={`pt-6 pb-12 px-8 transition-all duration-300 ml-64 ${
-          isRightSidebarOpen ? 'mr-80' : 'mr-0'
+        className={`pt-16 md:pt-6 pb-24 md:pb-12 px-3 md:px-8 transition-all duration-300 ml-0 md:ml-64 ${
+          isRightSidebarOpen ? 'mr-0 md:mr-80' : 'mr-0'
         }`}
       >
         <div className="max-w-5xl mx-auto">
@@ -136,6 +163,16 @@ function App() {
         isOpen={isRightSidebarOpen} 
         setIsOpen={setIsRightSidebarOpen} 
         selectedDate={calendarDate}
+      />
+
+      {/* iOS Bottom Tab Bar */}
+      <MobileTabBar 
+        activeTab={activeTab === 'fixed-expenses' ? 'fixed' : activeTab === 'statistics' ? 'analytics' : activeTab}
+        setActiveTab={(t) => {
+          if (t === 'fixed') setActiveTab('fixed-expenses');
+          else if (t === 'analytics') setActiveTab('statistics');
+          else setActiveTab(t);
+        }}
       />
 
       {/* Action floating buttons drawer */}

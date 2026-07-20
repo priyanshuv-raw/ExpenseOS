@@ -13,7 +13,8 @@ import {
   Compass,
   Cloud,
   LogOut,
-  LogIn
+  LogIn,
+  X
 } from 'lucide-react';
 import { 
   signInWithGoogle, 
@@ -30,9 +31,18 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: SidebarProps) {
+export function Sidebar({ 
+  activeTab, 
+  setActiveTab, 
+  theme, 
+  toggleTheme,
+  isMobileOpen = false,
+  onCloseMobile
+}: SidebarProps) {
   const [user, setUser] = useState<User | null>(auth.currentUser);
   const [loading, setLoading] = useState<boolean>(false);
   const [lastSyncTime, setLastSyncTime] = useState<string>('Just now');
@@ -89,144 +99,176 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
+  const handleTabSelect = (tabId: string) => {
+    setActiveTab(tabId);
+    if (onCloseMobile) onCloseMobile();
+  };
+
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 border-r border-neutral-200/50 dark:border-neutral-800/50 bg-white/70 dark:bg-neutral-950/70 backdrop-blur-md flex flex-col justify-between p-4 z-10">
-      <div className="flex flex-col gap-6">
-        {/* Brand / Logo */}
-        <div className="flex items-center gap-3 px-2 pt-2">
-          <div className="w-9 h-9 rounded-xl bg-apple-blue flex items-center justify-center shadow-md shadow-apple-blue/30">
-            <Compass className="w-5 h-5 text-white" />
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {isMobileOpen && (
+        <div 
+          onClick={onCloseMobile}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden animate-fade-in"
+        />
+      )}
+
+      {/* Sidebar Container */}
+      <aside 
+        className={`w-64 h-screen fixed left-0 top-0 border-r border-neutral-200/50 dark:border-neutral-800/50 bg-white/95 dark:bg-neutral-950/95 md:bg-white/70 md:dark:bg-neutral-950/70 backdrop-blur-xl flex flex-col justify-between p-4 z-50 transition-transform duration-300 ${
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        <div className="flex flex-col gap-6">
+          {/* Brand / Logo */}
+          <div className="flex items-center justify-between px-2 pt-2">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-apple-blue flex items-center justify-center shadow-md shadow-apple-blue/30">
+                <Compass className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-md font-bold tracking-tight text-neutral-950 dark:text-neutral-50 font-sans">Life OS</h1>
+                <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider">Workspace</p>
+              </div>
+            </div>
+
+            {/* Mobile Close Button */}
+            {onCloseMobile && (
+              <button 
+                onClick={onCloseMobile}
+                className="md:hidden p-1.5 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
-          <div>
-            <h1 className="text-md font-bold tracking-tight text-neutral-950 dark:text-neutral-50 font-sans">Life OS</h1>
-            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold uppercase tracking-wider">Workspace</p>
-          </div>
+
+          {/* Navigation Items */}
+          <nav className="flex flex-col gap-1">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleTabSelect(item.id)}
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 text-left ${isActive
+                    ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/20'
+                    : 'text-neutral-500 dark:text-neutral-450 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/60 hover:text-neutral-950 dark:hover:text-neutral-100'
+                    }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.75px]'}`} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex flex-col gap-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 text-left ${isActive
-                  ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/20'
-                  : 'text-neutral-500 dark:text-neutral-450 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/60 hover:text-neutral-950 dark:hover:text-neutral-100'
-                  }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.75px]'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Personal Information & Cloud Sync Bottom Card */}
-      <div className="flex flex-col gap-3 border-t border-neutral-200/40 dark:border-neutral-800/40 pt-3">
-        {user ? (
-          <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
-            {/* User Profile info */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                {user.photoURL ? (
-                  <img 
-                    src={user.photoURL} 
-                    alt={user.displayName || 'User'} 
-                    className="w-8 h-8 rounded-full border border-neutral-200/60 dark:border-neutral-700/60 shrink-0" 
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-apple-purple text-white flex items-center justify-center font-bold text-xs shrink-0">
-                    {user.displayName?.[0] || user.email?.[0] || 'P'}
+        {/* Personal Information & Cloud Sync Bottom Card */}
+        <div className="flex flex-col gap-3 border-t border-neutral-200/40 dark:border-neutral-800/40 pt-3">
+          {user ? (
+            <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
+              {/* User Profile info */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5 overflow-hidden">
+                  {user.photoURL ? (
+                    <img 
+                      src={user.photoURL} 
+                      alt={user.displayName || 'User'} 
+                      className="w-8 h-8 rounded-full border border-neutral-200/60 dark:border-neutral-700/60 shrink-0" 
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-apple-purple text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      {user.displayName?.[0] || user.email?.[0] || 'P'}
+                    </div>
+                  )}
+                  <div className="flex flex-col truncate">
+                    <span className="text-xs font-extrabold text-neutral-900 dark:text-white truncate">
+                      {user.displayName || 'Priyanshu Kumar'}
+                    </span>
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500 truncate">
+                      {user.email || 'Cloud Synced'}
+                    </span>
                   </div>
-                )}
-                <div className="flex flex-col truncate">
-                  <span className="text-xs font-extrabold text-neutral-900 dark:text-white truncate">
-                    {user.displayName || 'Priyanshu Kumar'}
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  disabled={loading}
+                  className="p-1.5 rounded-lg text-neutral-400 hover:text-apple-red hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Cloud Sync Status & Last Sync Time */}
+              <div className="pt-1.5 border-t border-neutral-200/30 dark:border-neutral-800/30 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>
-                  <span className="text-[10px] text-neutral-400 dark:text-neutral-500 truncate">
-                    {user.email || 'Cloud Synced'}
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                    Live Synced to Cloud
                   </span>
+                </div>
+                <span className="text-[9px] font-semibold text-neutral-400 dark:text-neutral-500">
+                  {lastSyncTime}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-apple-blue/10 text-apple-blue">
+                    <Cloud className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+                      Personal Space
+                    </span>
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
+                      Local Device Storage
+                    </span>
+                  </div>
                 </div>
               </div>
 
               <button
-                onClick={handleLogout}
+                onClick={handleLogin}
                 disabled={loading}
-                className="p-1.5 rounded-lg text-neutral-400 hover:text-apple-red hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
-                title="Sign Out"
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <LogOut className="w-3.5 h-3.5" />
+                <LogIn className="w-3.5 h-3.5" />
+                <span>{loading ? 'Connecting...' : 'Sign in with Google'}</span>
               </button>
             </div>
+          )}
 
-            {/* Cloud Sync Status & Last Sync Time */}
-            <div className="pt-1.5 border-t border-neutral-200/30 dark:border-neutral-800/30 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                  Live Synced to Cloud
-                </span>
-              </div>
-              <span className="text-[9px] font-semibold text-neutral-400 dark:text-neutral-500">
-                {lastSyncTime}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-apple-blue/10 text-apple-blue">
-                  <Cloud className="w-4 h-4" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
-                    Personal Space
-                  </span>
-                  <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
-                    Local Device Storage
-                  </span>
-                </div>
-              </div>
-            </div>
-
+          {/* Theme Switcher Row */}
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500">Appearance</span>
             <button
-              onClick={handleLogin}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-apple-blue hover:bg-blue-600 text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-300 text-[11px] font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
             >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>{loading ? 'Connecting...' : 'Sign in with Google'}</span>
+              {theme === 'light' ? (
+                <>
+                  <Moon className="w-3 h-3" /> Dark
+                </>
+              ) : (
+                <>
+                  <Sun className="w-3 h-3 text-amber-400" /> Light
+                </>
+              )}
             </button>
           </div>
-        )}
-
-        {/* Theme Switcher Row */}
-        <div className="flex items-center justify-between px-1">
-          <span className="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500">Appearance</span>
-          <button
-            onClick={toggleTheme}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-300 text-[11px] font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-          >
-            {theme === 'light' ? (
-              <>
-                <Moon className="w-3 h-3" /> Dark
-              </>
-            ) : (
-              <>
-                <Sun className="w-3 h-3 text-amber-400" /> Light
-              </>
-            )}
-          </button>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

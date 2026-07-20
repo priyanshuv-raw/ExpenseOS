@@ -199,7 +199,7 @@ export function FloatingAddButton() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-20 md:bottom-6 right-5 md:right-6 z-40">
       {/* Menu Options */}
       {isOpen && (
         <div className="absolute bottom-16 right-0 flex flex-col gap-2.5 items-end mb-1">
