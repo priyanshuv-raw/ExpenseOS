@@ -15,9 +15,7 @@ export function OutstandingPage() {
   const [name, setName] = useState('');
   const [type, setType] = useState<OutstandingDebt['type']>('Credit Card');
   const [amount, setAmount] = useState('');
-  const [interest, setInterest] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [minDue, setMinDue] = useState('');
 
   // Pay Liability States
   const [selectedDebtId, setSelectedDebtId] = useState<string | null>(null);
@@ -52,9 +50,9 @@ export function OutstandingPage() {
       name,
       type,
       outstandingAmount: Number(amount),
-      interest: Number(interest) || 0,
+      interest: 0,
       dueDate: dueDate || format(new Date(), 'yyyy-MM-dd'),
-      minimumDue: Number(minDue) || 0,
+      minimumDue: 0,
       status: 'active',
       paymentHistory: [],
       cardLimit: type === 'Credit Card' ? (Number(cardLimit) || 100000) : undefined,
@@ -67,9 +65,7 @@ export function OutstandingPage() {
     // Reset Form
     setName('');
     setAmount('');
-    setInterest('');
     setDueDate('');
-    setMinDue('');
     setCardLimit('100000');
     setDirection('borrowed');
     setShowAddForm(false);
@@ -80,9 +76,7 @@ export function OutstandingPage() {
     setName(debt.name);
     setType(debt.type);
     setAmount(debt.outstandingAmount.toString());
-    setInterest(debt.interest.toString());
     setDueDate(debt.dueDate);
-    setMinDue(debt.minimumDue.toString());
     setCardLimit(debt.cardLimit?.toString() || '100000');
     setDirection(debt.direction || 'borrowed');
     setShowAddForm(true);
@@ -100,9 +94,9 @@ export function OutstandingPage() {
       name,
       type,
       outstandingAmount: Number(amount),
-      interest: Number(interest) || 0,
+      interest: 0,
       dueDate: dueDate || format(new Date(), 'yyyy-MM-dd'),
-      minimumDue: Number(minDue) || 0,
+      minimumDue: 0,
       cardLimit: type === 'Credit Card' ? (Number(cardLimit) || 100000) : undefined,
       direction: direction
     };
@@ -114,9 +108,7 @@ export function OutstandingPage() {
     setEditingDebtId(null);
     setName('');
     setAmount('');
-    setInterest('');
     setDueDate('');
-    setMinDue('');
     setCardLimit('100000');
     setDirection('borrowed');
     setShowAddForm(false);
@@ -144,9 +136,7 @@ export function OutstandingPage() {
     setEditingDebtId(null);
     setName('');
     setAmount('');
-    setInterest('');
     setDueDate('');
-    setMinDue('');
     setCardLimit('100000');
     setDirection('borrowed');
     setShowAddForm(false);
@@ -350,9 +340,7 @@ export function OutstandingPage() {
 
               <div className="text-[11px] text-neutral-455 dark:text-neutral-500 mt-1 flex flex-col gap-0.5">
                 <span>Due Date: {debt.dueDate}</span>
-                {debt.minimumDue > 0 && <span>Minimum Due: ₹{debt.minimumDue.toLocaleString()}</span>}
                 {debt.status === 'active' && debt.type === 'Credit Card' && <span>Limit: ₹{(debt.cardLimit || 100000).toLocaleString()}</span>}
-                {debt.status === 'active' && debt.interest > 0 && <span>Interest: {debt.interest}% p.a.</span>}
               </div>
             </div>
 
@@ -395,7 +383,7 @@ export function OutstandingPage() {
         )}
       </div>
 
-      {/* Add Liability Form Modal */}
+      {/* Add / Edit Debt/Liability Form Modal */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-6 w-full max-w-md shadow-2xl relative">
@@ -406,7 +394,9 @@ export function OutstandingPage() {
                <X className="w-5 h-5" />
              </button>
              <h2 className="text-lg font-bold text-neutral-900 dark:text-white mb-4">
-               {editingDebtId ? 'Edit Debt / Liability' : 'Add Debt / Liability'}
+               {editingDebtId 
+                 ? (direction === 'lent' ? 'Edit Receivable' : 'Edit Debt / Liability') 
+                 : (direction === 'lent' ? 'Log Receivable' : 'Log Debt / Liability')}
              </h2>
              
              <form onSubmit={editingDebtId ? handleUpdate : handleAdd} className="flex flex-col gap-4">
@@ -429,7 +419,7 @@ export function OutstandingPage() {
                      onClick={() => setDirection('lent')}
                      className={`flex-1 py-2 rounded-lg font-bold text-center transition-all ${
                        direction === 'lent' 
-                         ? 'bg-white dark:bg-neutral-850 text-neutral-950 dark:text-white shadow-sm' 
+                         ? 'bg-emerald-500 text-white shadow-sm' 
                          : 'text-neutral-550 dark:text-neutral-450 hover:text-neutral-850'
                      }`}
                    >
@@ -439,10 +429,12 @@ export function OutstandingPage() {
                </div>
 
                <div>
-                 <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Liability Name / Friend Name</label>
+                 <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">
+                   {direction === 'lent' ? 'Borrower / Friend Name' : 'Liability Name / Lender Name'}
+                 </label>
                  <input 
                    type="text" 
-                   placeholder="e.g. HDFC Regalia, Car Loan, Amit" 
+                   placeholder={direction === 'lent' ? 'e.g. Rahul, Bablu' : 'e.g. HDFC Regalia, Car Loan, Amit'} 
                    value={name}
                    onChange={(e) => setName(e.target.value)}
                    className="w-full bg-white dark:bg-neutral-950 px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 mt-1 text-sm focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue text-neutral-900 dark:text-white"
@@ -452,7 +444,7 @@ export function OutstandingPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Debt Type</label>
+                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Category Type</label>
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as any)}
@@ -465,37 +457,16 @@ export function OutstandingPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Owed Amount (₹)</label>
+                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">
+                    {direction === 'lent' ? 'Receivable Amount (₹)' : 'Owed Amount (₹)'}
+                  </label>
                   <input 
                     type="number" 
-                    placeholder="Amount Owed" 
+                    placeholder="Amount" 
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     className="w-full bg-white dark:bg-neutral-950 px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 mt-1 text-sm focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue text-neutral-900 dark:text-white"
                     required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Interest Rate (% p.a.)</label>
-                  <input 
-                    type="number" 
-                    placeholder="e.g. 8.5" 
-                    value={interest}
-                    onChange={(e) => setInterest(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-950 px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 mt-1 text-sm focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue text-neutral-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">Minimum Due (₹)</label>
-                  <input 
-                    type="number" 
-                    placeholder="Min payment due" 
-                    value={minDue}
-                    onChange={(e) => setMinDue(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-950 px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 mt-1 text-sm focus:outline-none focus:border-apple-blue focus:ring-1 focus:ring-apple-blue text-neutral-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -526,9 +497,15 @@ export function OutstandingPage() {
 
               <button
                 type="submit"
-                className="w-full bg-apple-blue text-white py-3 rounded-xl text-sm font-bold mt-2 shadow-md shadow-apple-blue/15 hover:bg-apple-blue/90 transition-colors"
+                className={`w-full text-white py-3 rounded-xl text-sm font-bold mt-2 shadow-md transition-all cursor-pointer ${
+                  direction === 'lent' 
+                    ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20' 
+                    : 'bg-apple-blue hover:bg-blue-600 shadow-apple-blue/15'
+                }`}
               >
-                {editingDebtId ? 'Update Liability' : 'Log Liability'}
+                {editingDebtId 
+                  ? (direction === 'lent' ? 'Update Receivable' : 'Update Liability') 
+                  : (direction === 'lent' ? 'Log Receivable' : 'Log Liability')}
               </button>
              </form>
            </div>
@@ -589,7 +566,7 @@ export function OutstandingPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-apple-blue text-white py-3 rounded-xl text-sm font-bold mt-2 shadow-md shadow-apple-blue/15 hover:bg-apple-blue/90 transition-colors"
+                  className="w-full bg-apple-blue text-white py-3 rounded-xl text-sm font-bold mt-2 shadow-md shadow-apple-blue/15 hover:bg-apple-blue/90 transition-colors cursor-pointer"
                 >
                   {isLentMode ? 'Confirm Receipt' : 'Log Payment'}
                 </button>
