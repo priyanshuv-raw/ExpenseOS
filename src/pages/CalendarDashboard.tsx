@@ -525,12 +525,12 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
                       </span>
                     )}
                     {metrics.journalWritten && metrics.sleepHours > 0 && (
-                      <span className="text-[8px] font-bold text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1 py-0.5 rounded leading-none">
+                      <span className="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded tracking-tight">
                         💤{metrics.sleepHours}h
                       </span>
                     )}
                     {metrics.journalWritten && metrics.cigarettes > 0 && (
-                      <span className="text-[8px] font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-1 py-0.5 rounded leading-none">
+                      <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40 px-1.5 py-0.5 rounded tracking-tight">
                         🚬{metrics.cigarettes}
                       </span>
                     )}
@@ -581,16 +581,13 @@ export function CalendarDashboard({ currentDate: propCurrentDate, setCurrentDate
 
                   {/* 3. Habit bar */}
                   {metrics.habitPercent > 0 && (
-                    <div className="flex items-center gap-1.5 mt-auto pt-1">
-                      <div className="flex-1 h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                    <div className="w-full mt-auto pt-1">
+                      <div className="w-full h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-apple-teal rounded-full transition-all duration-350"
                           style={{ width: `${metrics.habitPercent}%` }}
                         />
                       </div>
-                      <span className="text-[8px] font-bold text-apple-teal leading-none">
-                        {metrics.habitPercent}%
-                      </span>
                     </div>
                   )}
                 </div>
