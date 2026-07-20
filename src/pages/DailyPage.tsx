@@ -374,19 +374,19 @@ export function DailyPage({ dateStr, onClose }: DailyPageProps) {
                 <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider">Daily Check-in</span>
               </div>
 
-              <div className="flex items-center gap-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0">
                 {/* Mood emojis */}
                 <div className="flex-1">
                   <label className="text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase block mb-2">Mood</label>
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-1.5 flex-wrap sm:flex-nowrap justify-between sm:justify-start">
                     {(['😊', '😄', '😐', '😔', '😢'] as const).map(emoji => (
                       <button
                         key={emoji}
                         type="button"
                         onClick={() => setMood(emoji)}
-                        className={`text-xl p-2 rounded-xl transition-all cursor-pointer ${
+                        className={`text-xl p-2 rounded-xl transition-all cursor-pointer flex-1 sm:flex-none text-center ${
                           mood === emoji
-                            ? 'bg-apple-blue/10 border border-apple-blue scale-110'
+                            ? 'bg-apple-blue/10 border border-apple-blue scale-105'
                             : 'bg-white border border-neutral-200 hover:bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800'
                         }`}
                       >
@@ -396,11 +396,11 @@ export function DailyPage({ dateStr, onClose }: DailyPageProps) {
                   </div>
                 </div>
 
-                {/* Vertical divider */}
-                <div className="w-px self-stretch bg-neutral-100 dark:bg-neutral-800 mx-5 flex-shrink-0" />
+                {/* Vertical divider on desktop */}
+                <div className="hidden sm:block w-px self-stretch bg-neutral-100 dark:bg-neutral-800 mx-5 flex-shrink-0" />
 
                 {/* Sleep + Cigs */}
-                <div className="flex items-end gap-5 flex-shrink-0">
+                <div className="flex items-center justify-around sm:justify-start gap-6 pt-3 sm:pt-0 border-t sm:border-t-0 border-neutral-100 dark:border-neutral-850 flex-shrink-0">
                   {/* Sleep Hours */}
                   <div className="flex flex-col items-center gap-1.5">
                     <label className="text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase flex items-center gap-1">
