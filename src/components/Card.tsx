@@ -14,7 +14,7 @@ export function Card({ children, className = '', hoverEffect = true, onClick }: 
       whileHover={hoverEffect ? { y: -2, scale: 1.005 } : undefined}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       onClick={onClick}
-      className={`bg-white dark:bg-neutral-900/60 apple-border rounded-2xl p-5 apple-shadow ${className}`}
+      className={`bg-white dark:bg-neutral-900/60 apple-border rounded-2xl p-5 apple-shadow ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       {children}
     </motion.div>

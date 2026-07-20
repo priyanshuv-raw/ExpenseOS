@@ -224,7 +224,7 @@ export function Sidebar({
                       <button
                         key={item.id}
                         onClick={() => handleTabSelect(item.id)}
-                        className={`transition-all duration-200 text-left relative group flex items-center ${
+                        className={`cursor-pointer transition-all duration-200 text-left relative group flex items-center ${
                           isCollapsed
                             ? 'w-10 h-10 rounded-2xl justify-center p-0 mx-auto'
                             : 'w-full gap-3 px-2.5 py-2 rounded-2xl text-xs'

@@ -116,6 +116,19 @@ html.dark .apple-shadow {
 }
 
 /* Premium Visual Hover Feedback & Contrast Adjustments */
+button, 
+[role="button"], 
+a, 
+select, 
+summary,
+input[type="submit"], 
+input[type="button"],
+input[type="checkbox"],
+input[type="radio"],
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
 button {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
