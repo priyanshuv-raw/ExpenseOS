@@ -46,14 +46,23 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-// Initialize Firestore with offline persistence
-export const dbFirestore = isFirebaseConfigured() 
-  ? initializeFirestore(app, {
+// Initialize Firestore safely with fallback
+let firestoreInstance: any = null;
+try {
+  firestoreInstance = getFirestore(app);
+} catch (e) {
+  try {
+    firestoreInstance = initializeFirestore(app, {
       localCache: persistentLocalCache({
         tabManager: persistentMultipleTabManager()
       })
-    })
-  : getFirestore(app);
+    });
+  } catch (err) {
+    console.warn('Firestore initialization warning:', err);
+  }
+}
+
+export const dbFirestore = firestoreInstance;
 
 // Auth Helpers
 export const signInWithGoogle = async () => {

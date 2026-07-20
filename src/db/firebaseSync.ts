@@ -13,7 +13,7 @@ let unsubscribeSnapshot: (() => void) | null = null;
  * Pushes local Dexie database to Firebase Firestore under user's document
  */
 export async function pushLocalToFirebase(userId: string) {
-  if (isSyncingFromCloud) return;
+  if (isSyncingFromCloud || !dbFirestore) return;
 
   clearTimeout(pushTimeout);
   pushTimeout = setTimeout(async () => {
@@ -43,7 +43,7 @@ export async function pushLocalToFirebase(userId: string) {
  * Initializes Firebase Real-time Auth & Cloud Sync listener
  */
 export function initFirebaseSync(onUserChange?: (user: User | null) => void) {
-  if (!isFirebaseConfigured()) return;
+  if (!isFirebaseConfigured() || !dbFirestore || !auth) return;
 
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
