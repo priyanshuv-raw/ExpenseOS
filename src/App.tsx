@@ -26,6 +26,15 @@ function App() {
   const [dbInitialized, setDbInitialized] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(auth.currentUser);
 
+  // Keep DOM classList synchronized with theme state
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, u => setUser(u));
     return () => unsub();
