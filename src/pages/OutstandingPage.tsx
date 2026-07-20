@@ -257,8 +257,10 @@ export function OutstandingPage() {
                   {ccUtilization}%
                 </span>
               </div>
-              <span className={`text-[10px] font-bold px-2 py-0.75 rounded-md ${
-                ccUtilization > 50 ? 'bg-red-55/10 text-red-550 dark:bg-red-950/20 dark:text-red-400' : 'bg-neutral-100 dark:bg-neutral-850 text-neutral-700 dark:text-neutral-300'
+              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${
+                ccUtilization > 50 
+                  ? 'bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border-red-500/30' 
+                  : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-500/30'
               }`}>
                 {ccUtilization > 50 ? 'High' : 'Healthy'}
               </span>
@@ -292,13 +294,13 @@ export function OutstandingPage() {
             <div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider bg-neutral-100 dark:bg-neutral-850 px-2 py-0.75 rounded-md">
+                  <span className="text-[9px] font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/50 dark:border-neutral-700/60 px-2 py-0.75 rounded-md">
                     {debt.type}
                   </span>
-                  <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded ${
+                  <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
                     (debt.direction || 'borrowed') === 'lent' 
-                      ? 'bg-emerald-50 text-emerald-650 dark:bg-emerald-950/40 dark:text-emerald-400' 
-                      : 'bg-red-50 text-red-650 dark:bg-red-950/40 dark:text-red-400'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-500/30' 
+                      : 'bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border-red-500/30'
                   }`}>
                     {(debt.direction || 'borrowed') === 'lent' ? 'Receivable' : 'Liability'}
                   </span>
