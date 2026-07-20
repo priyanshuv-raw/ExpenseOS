@@ -84,7 +84,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
   ];
 
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 border-r border-neutral-150 dark:border-neutral-900 bg-white/70 dark:bg-neutral-950/70 backdrop-blur-md flex flex-col justify-between p-4 z-10">
+    <aside className="w-64 h-screen fixed left-0 top-0 border-r border-neutral-200/50 dark:border-neutral-800/50 bg-white/70 dark:bg-neutral-950/70 backdrop-blur-md flex flex-col justify-between p-4 z-10">
       <div className="flex flex-col gap-6">
         {/* Brand / Logo */}
         <div className="flex items-center gap-3 px-2 pt-2">
@@ -108,7 +108,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 text-left ${isActive
                   ? 'bg-apple-blue text-white shadow-md shadow-apple-blue/20'
-                  : 'text-neutral-500 dark:text-neutral-450 hover:bg-neutral-100 dark:hover:bg-neutral-900/60 hover:text-neutral-950 dark:hover:text-neutral-100'
+                  : 'text-neutral-500 dark:text-neutral-450 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/60 hover:text-neutral-950 dark:hover:text-neutral-100'
                   }`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.5px]' : 'stroke-[1.75px]'}`} />
@@ -120,9 +120,9 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
       </div>
 
       {/* Personal Information & Cloud Sync Bottom Card */}
-      <div className="flex flex-col gap-3 border-t border-neutral-150 dark:border-neutral-900 pt-3">
+      <div className="flex flex-col gap-3 border-t border-neutral-200/40 dark:border-neutral-800/40 pt-3">
         {user ? (
-          <div className="p-3 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900/80 border border-neutral-200/60 dark:border-neutral-800 flex flex-col gap-2.5 shadow-sm">
+          <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
             {/* User Profile info */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5 overflow-hidden">
@@ -130,7 +130,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
                   <img 
                     src={user.photoURL} 
                     alt={user.displayName || 'User'} 
-                    className="w-8 h-8 rounded-full border border-neutral-300 dark:border-neutral-700 shrink-0" 
+                    className="w-8 h-8 rounded-full border border-neutral-200/60 dark:border-neutral-700/60 shrink-0" 
                   />
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-apple-purple text-white flex items-center justify-center font-bold text-xs shrink-0">
@@ -150,7 +150,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
               <button
                 onClick={handleLogout}
                 disabled={loading}
-                className="p-1.5 rounded-lg text-neutral-400 hover:text-apple-red hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors shrink-0 cursor-pointer"
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-apple-red hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60 transition-colors shrink-0 cursor-pointer"
                 title="Sign Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -158,7 +158,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
             </div>
 
             {/* Cloud Sync Status & Last Sync Time */}
-            <div className="pt-1.5 border-t border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-between">
+            <div className="pt-1.5 border-t border-neutral-200/30 dark:border-neutral-800/30 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -174,7 +174,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
             </div>
           </div>
         ) : (
-          <div className="p-3 rounded-2xl bg-neutral-100/80 dark:bg-neutral-900/80 border border-neutral-200/60 dark:border-neutral-800 flex flex-col gap-2.5 shadow-sm">
+          <div className="p-3 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/50 border border-neutral-200/40 dark:border-neutral-800/40 flex flex-col gap-2.5 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-apple-blue/10 text-apple-blue">
@@ -207,7 +207,7 @@ export function Sidebar({ activeTab, setActiveTab, theme, toggleTheme }: Sidebar
           <span className="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500">Appearance</span>
           <button
             onClick={toggleTheme}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-300 text-[11px] font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-neutral-200/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/80 text-neutral-600 dark:text-neutral-300 text-[11px] font-bold hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
           >
             {theme === 'light' ? (
               <>
