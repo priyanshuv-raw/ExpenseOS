@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "SF Pro Display", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  --font-mono: "SF Mono", "ui-monospace", "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+  
+  --color-apple-blue: #007aff;
+  --color-apple-red: #ff3b30;
+  --color-apple-green: #34c759;
+  --color-apple-orange: #ff9500;
+  --color-apple-purple: #af52de;
+  --color-apple-teal: #00c7be;
+  --color-apple-pink: #ff2d55;
+  --color-apple-indigo: #5856d6;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background-color: #fcfcfc;
+  color: #1c1c1e;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Dark mode styling */
+html.dark, html.dark body, html.dark #root {
+  background-color: #010102;
+  color: #f2f2f7;
+}
+
+/* Input Placeholder Contrast Fixes */
+input::placeholder, textarea::placeholder {
+  color: #8e8e93 !important;
+  opacity: 1 !important;
+}
+
+html.dark input::placeholder, html.dark textarea::placeholder {
+  color: #aeaeb2 !important;
+  opacity: 1 !important;
+}
+
+/* Smooth, premium scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7c7cc;
+  border-radius: 9999px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #3a3a3c;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8e8e93;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #636366;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom visual highlights and utilities */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+html.dark .apple-glass {
+  background: rgba(28, 28, 30, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.apple-border {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.dark .apple-border {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.apple-shadow {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}
+
+html.dark .apple-shadow {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Rich Text Editor Placeholder classes */
+.ProseMirror p {
+  margin-bottom: 0.5em;
+}
+.ProseMirror:focus {
+  outline: none;
+}
+
+/* Premium Visual Hover Feedback & Contrast Adjustments */
+button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+button:hover {
+  filter: brightness(0.9) !important;
+}
+
+html.dark button:hover {
+  filter: brightness(1.16) !important;
+}
+
+/* Custom visual highlights on hovered form icons */
+.hover\:text-apple-blue:hover {
+  color: var(--color-apple-blue) !important;
+}
+.hover\:text-apple-red:hover {
+  color: var(--color-apple-red) !important;
+}

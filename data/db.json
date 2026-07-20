@@ -1,0 +1,347 @@
+{
+  "journal": [
+    {
+      "date": "2026-07-20",
+      "content": "Woke up with a bad mood.\n",
+      "mood": "😐",
+      "energy": 3,
+      "stress": 2,
+      "sleepHours": 9,
+      "wakeTime": "07:00",
+      "sleepTime": "23:00",
+      "cigarettes": 0
+    }
+  ],
+  "expenses": [
+    {
+      "id": "c0072d7b-adb5-4e3c-a27a-ee44f581f2c2",
+      "amount": 10,
+      "category": "Travel",
+      "account": "hdfc",
+      "paymentType": "Cash",
+      "description": "Rickshaw",
+      "date": "2026-07-20",
+      "time": "10:34"
+    },
+    {
+      "id": "c5b97b27-8ff3-439a-a0ba-c5fa680e7c3c",
+      "amount": 26,
+      "category": "Other",
+      "account": "aa9e440b-9042-4db8-bd6f-5a87014191d4",
+      "paymentType": "HDFC Bank",
+      "description": "Cig",
+      "date": "2026-07-20",
+      "time": "12:35"
+    },
+    {
+      "id": "d056902f-b181-4d13-aca2-6bd6ec71cb76",
+      "amount": 30,
+      "category": "Food",
+      "account": "aa9e440b-9042-4db8-bd6f-5a87014191d4",
+      "paymentType": "HDFC Bank",
+      "description": "Poha",
+      "date": "2026-07-20",
+      "time": "09:53"
+    }
+  ],
+  "fixedExpenses": [
+    {
+      "id": "0e4559ec-205a-4fd6-9f5c-b62cae5050e3",
+      "name": "Rent",
+      "amount": 14500,
+      "repeat": "Monthly",
+      "dueDate": 4,
+      "category": "Rent",
+      "autoGenerate": true,
+      "lastGeneratedMonth": "2026-07"
+    },
+    {
+      "id": "11d43339-9b87-40f0-8f43-a0db47424bbf",
+      "name": "Salary",
+      "amount": 56832,
+      "repeat": "Monthly",
+      "dueDate": 3,
+      "category": "Income",
+      "autoGenerate": true,
+      "lastGeneratedMonth": "2026-07"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "3ae1dd2c-3b66-4dc7-9d5c-c1ae2e48f70e",
+      "name": "Cash",
+      "openingBalance": 800,
+      "balance": 800,
+      "icon": "wallet"
+    },
+    {
+      "id": "5eb85bca-77c4-475e-9dc6-6998dd01f534",
+      "name": "Axis Bank",
+      "openingBalance": 7871,
+      "balance": 7871,
+      "icon": "bank"
+    },
+    {
+      "id": "aa9e440b-9042-4db8-bd6f-5a87014191d4",
+      "name": "HDFC Bank",
+      "openingBalance": 8813,
+      "balance": 8757,
+      "icon": "briefcase"
+    }
+  ],
+  "outstanding": [
+    {
+      "id": "612863da-2dfa-43bf-8657-7bdbe397fbd8",
+      "name": "Bablu Kumar",
+      "type": "Friend",
+      "outstandingAmount": 2000,
+      "interest": 0,
+      "dueDate": "2026-08-03",
+      "minimumDue": 0,
+      "status": "active",
+      "paymentHistory": [],
+      "direction": "lent"
+    },
+    {
+      "id": "9f4e762b-7c0d-491e-9869-47f71bfc6a83",
+      "name": "Rahul Yadav",
+      "type": "Friend",
+      "outstandingAmount": 580,
+      "interest": 0,
+      "dueDate": "2026-08-03",
+      "minimumDue": 0,
+      "status": "active",
+      "paymentHistory": [],
+      "direction": "lent"
+    },
+    {
+      "id": "d97da7fa-0139-4085-89a9-8ccb5582f615",
+      "name": "Reimbursement",
+      "type": "Loan",
+      "outstandingAmount": 762,
+      "interest": 0,
+      "dueDate": "2026-07-23",
+      "minimumDue": 0,
+      "status": "active",
+      "paymentHistory": [],
+      "direction": "lent"
+    },
+    {
+      "id": "o1",
+      "name": "Axis Bank Flipkart",
+      "type": "Credit Card",
+      "outstandingAmount": 13314,
+      "interest": 0,
+      "dueDate": "2026-08-05",
+      "minimumDue": 0,
+      "status": "active",
+      "paymentHistory": [
+        {
+          "date": "2026-06-05",
+          "amount": 12000
+        },
+        {
+          "date": "2026-07-05",
+          "amount": 15400
+        }
+      ],
+      "cardLimit": 120000,
+      "direction": "borrowed"
+    },
+    {
+      "id": "o2",
+      "name": "Slice",
+      "type": "Credit Card",
+      "outstandingAmount": 24543,
+      "interest": 0,
+      "dueDate": "2026-08-05",
+      "minimumDue": 0,
+      "status": "active",
+      "paymentHistory": [
+        {
+          "date": "2026-06-01",
+          "amount": 11450
+        },
+        {
+          "date": "2026-07-01",
+          "amount": 11450
+        }
+      ],
+      "cardLimit": 110000,
+      "direction": "borrowed"
+    }
+  ],
+  "habits": [
+    {
+      "id": "3b5f7b68-8cfe-408a-8601-5b48ce97d780",
+      "name": "Under Budget",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "budget",
+      "order": 4
+    },
+    {
+      "id": "66983891-142b-4895-b589-ba12530a857c",
+      "name": "No Alcohol",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "ban",
+      "order": 6
+    },
+    {
+      "id": "7b52b14b-1302-4dcc-8fd5-4eaef0d9d28a",
+      "name": "Breakfast",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "alcohol",
+      "order": 1
+    },
+    {
+      "id": "81504e06-25c9-4fb8-a5d0-3d3934fca8bc",
+      "name": "No Sugar",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "sugar",
+      "order": 9
+    },
+    {
+      "id": "a7d0f70b-3aea-4593-9d6a-fd59db92466f",
+      "name": "Lunch",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "lunch",
+      "order": 2
+    },
+    {
+      "id": "b7a20654-3105-4e65-8dc6-a94186494370",
+      "name": "Good Sleep",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "sleep",
+      "order": 0
+    },
+    {
+      "id": "be050081-5529-4eca-81eb-09d78cf4753f",
+      "name": "Enough Water",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "water-glass",
+      "order": 8
+    },
+    {
+      "id": "dc40f695-7944-4c5c-b737-80e027884c98",
+      "name": "No Cigarette",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "cigarette",
+      "order": 5
+    },
+    {
+      "id": "f8c3ef76-0277-4409-83fa-bf18f0014cc5",
+      "name": "No Rapido",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "taxi",
+      "order": 7
+    },
+    {
+      "id": "ff0ca852-4981-4203-b244-59b1640f8a38",
+      "name": "Dinner",
+      "isDefault": false,
+      "active": true,
+      "createdAt": "2026-07-19",
+      "icon": "dinner",
+      "order": 3
+    }
+  ],
+  "habitLogs": [
+    {
+      "date": "2026-07-19",
+      "habitId": "3b5f7b68-8cfe-408a-8601-5b48ce97d780",
+      "completed": false,
+      "id": 151
+    },
+    {
+      "date": "2026-07-19",
+      "habitId": "a7d0f70b-3aea-4593-9d6a-fd59db92466f",
+      "completed": false,
+      "id": 152
+    },
+    {
+      "date": "2026-07-19",
+      "habitId": "66983891-142b-4895-b589-ba12530a857c",
+      "completed": false,
+      "id": 153
+    },
+    {
+      "date": "2026-07-19",
+      "habitId": "7b52b14b-1302-4dcc-8fd5-4eaef0d9d28a",
+      "completed": false,
+      "id": 154
+    },
+    {
+      "date": "2026-07-19",
+      "habitId": "81504e06-25c9-4fb8-a5d0-3d3934fca8bc",
+      "completed": false,
+      "id": 155
+    },
+    {
+      "date": "2026-07-20",
+      "habitId": "7b52b14b-1302-4dcc-8fd5-4eaef0d9d28a",
+      "completed": true,
+      "id": 156
+    },
+    {
+      "date": "2026-07-20",
+      "habitId": "b7a20654-3105-4e65-8dc6-a94186494370",
+      "completed": true,
+      "id": 157
+    },
+    {
+      "date": "2026-07-20",
+      "habitId": "66983891-142b-4895-b589-ba12530a857c",
+      "completed": true,
+      "id": 158
+    }
+  ],
+  "settings": [
+    {
+      "key": "categories",
+      "value": [
+        "Food",
+        "Groceries",
+        "Travel",
+        "Bills",
+        "Shopping",
+        "Entertainment",
+        "Medical",
+        "Subscription",
+        "Rent",
+        "Utilities",
+        "Other"
+      ]
+    },
+    {
+      "key": "currency",
+      "value": "₹"
+    },
+    {
+      "key": "dailyBudget",
+      "value": 450
+    },
+    {
+      "key": "theme",
+      "value": "light"
+    }
+  ],
+  "scheduledTransactions": []
+}
