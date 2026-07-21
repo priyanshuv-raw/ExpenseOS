@@ -18,6 +18,8 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { SearchPage } from './pages/SearchPage';
 import { SettingsPage } from './pages/SettingsPage';
 
+import { LandingPage } from './pages/LandingPage';
+
 function App() {
   const [activeTab, setActiveTab] = useState<string>('calendar');
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(false);
@@ -25,6 +27,7 @@ function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [dbInitialized, setDbInitialized] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(auth.currentUser);
+  const [isDemoMode, setIsDemoMode] = useState<boolean>(() => localStorage.getItem('dayledge_demo_mode') === 'true');
 
   // Keep DOM classList synchronized with theme state
   useEffect(() => {
@@ -36,7 +39,12 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, u => setUser(u));
+    const unsub = onAuthStateChanged(auth, u => {
+      setUser(u);
+      if (u) {
+        setIsDemoMode(false);
+      }
+    });
     return () => unsub();
   }, []);
 
@@ -143,6 +151,18 @@ function App() {
           Loading workspace
         </p>
       </div>
+    );
+  }
+
+  // Render Landing Page for first-time / logged-out users
+  if (!user && !isDemoMode) {
+    return (
+      <LandingPage 
+        onExploreDemo={() => {
+          setIsDemoMode(true);
+          localStorage.setItem('dayledge_demo_mode', 'true');
+        }} 
+      />
     );
   }
 
