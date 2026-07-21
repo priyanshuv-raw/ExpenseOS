@@ -57,6 +57,15 @@ function App() {
 
   // Initialize DB and Seed
   useEffect(() => {
+    let mounted = true;
+
+    // Safety fallback timeout to prevent stuck loading screen
+    const fallbackTimer = setTimeout(() => {
+      if (mounted) {
+        setDbInitialized(true);
+      }
+    }, 1500);
+
     const initApp = async () => {
       try {
         // 1. Seed database with defaults if empty
@@ -83,14 +92,22 @@ function App() {
             document.documentElement.classList.add('dark');
           }
         }
-
-        setDbInitialized(true);
       } catch (err) {
         console.error('Error initializing DB/LifeOS application:', err);
+      } finally {
+        clearTimeout(fallbackTimer);
+        if (mounted) {
+          setDbInitialized(true);
+        }
       }
     };
 
     initApp();
+
+    return () => {
+      mounted = false;
+      clearTimeout(fallbackTimer);
+    };
   }, []);
 
   const toggleTheme = async () => {
