@@ -17,7 +17,8 @@ import {
   Moon, 
   Flame, 
   Star,
-  Check
+  Check,
+  BookOpen
 } from 'lucide-react';
 import { signInWithGoogle } from '../config/firebase';
 
@@ -51,7 +52,18 @@ export function LandingPage({ onExploreDemo }: LandingPageProps) {
       {/* Top Navbar */}
       <header className="relative z-20 max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="/app-icon.png" alt="Dayledge Logo" className="w-10 h-10 rounded-xl shadow-lg border border-white/10" />
+          <div className="w-10 h-10 rounded-xl bg-[#0d1b2a] border border-[#26bba3]/40 flex items-center justify-center shadow-lg overflow-hidden shrink-0">
+            <img 
+              src="./app-icon.png" 
+              alt="Dayledge Logo" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to SVG icon if PNG fails to load
+                e.currentTarget.style.display = 'none';
+              }} 
+            />
+            <BookOpen className="w-5 h-5 text-[#26bba3] hidden" />
+          </div>
           <div className="flex flex-col">
             <span className="text-lg font-black tracking-tight text-white flex items-center gap-1.5">
               Dayledge <span className="text-[10px] font-bold uppercase bg-[#26bba3]/20 text-[#26bba3] border border-[#26bba3]/30 px-2 py-0.5 rounded-full">Life OS</span>
@@ -195,12 +207,41 @@ export function LandingPage({ onExploreDemo }: LandingPageProps) {
               </div>
             </div>
 
-            <div className="w-full md:w-80 shrink-0">
+            <div className="w-full md:w-80 shrink-0 relative">
               <img 
-                src="/og-image.png" 
+                src="./og-image.png" 
                 alt="Dayledge Dashboard Preview" 
-                className="w-full rounded-2xl border border-white/15 shadow-2xl hover:scale-105 transition-transform" 
+                className="w-full rounded-2xl border border-white/15 shadow-2xl hover:scale-105 transition-transform object-cover" 
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const fallbackEl = document.getElementById('dashboard-fallback-preview');
+                  if (fallbackEl) fallbackEl.style.display = 'flex';
+                }}
               />
+
+              {/* Fallback Glassmorphism App Dashboard Graphic */}
+              <div 
+                id="dashboard-fallback-preview"
+                className="hidden flex-col gap-3 p-4 rounded-2xl bg-[#070d18] border border-[#26bba3]/30 shadow-2xl"
+              >
+                <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                  <span className="text-xs font-bold text-[#26bba3]">Financial Health Score</span>
+                  <span className="text-xs font-black text-white bg-[#26bba3]/20 border border-[#26bba3]/40 px-2 py-0.5 rounded-md">71/100</span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex justify-between text-[11px] text-neutral-300 font-semibold">
+                    <span>Habit Streaks</span>
+                    <span className="text-[#26bba3]">12 Days 🔥</span>
+                  </div>
+                  <div className="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
+                    <div className="w-[85%] h-full bg-[#26bba3] rounded-full" />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-[10px] text-neutral-400 pt-1">
+                  <span>Daily Budget Limit: ₹450</span>
+                  <span className="text-emerald-400 font-bold">On Track</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
